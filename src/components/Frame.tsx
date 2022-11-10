@@ -1,11 +1,18 @@
-import { Route, Routes } from "react-router-dom";
 import "../css/default.css";
 import "../css/frame.css";
 import "../css/menu.css";
 import "../css/sectionDefaults.css";
 import { GlItens } from "./MenuItens";
+import PageController from "./PageController";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Frame = () => {
+
+    const [page, setPage] = useState(<></>);
+
+    const params = useParams();
+    let pageDescription = params.slug == undefined ? "" : params.slug;
 
     return (
         <>
@@ -19,12 +26,12 @@ const Frame = () => {
                     <div className="bottom-segment">
                         <nav>
                             <ul className="menu-nav">
-                                <GlItens />
+                                <GlItens setPage={setPage} />
                             </ul>
                         </nav>
                         <form className="form-ghost config" method="post">
                             <input type="text" className="input-ghost" name="sair" value="sair" />
-                            <button className="button-sair" type="submit">
+                            <div className="button-sair">
                                 <div className="item-icon">
                                     <svg fill="#8f8f8f" viewBox="0 0 30 30" width="20px" height="20px">
                                         <path
@@ -32,7 +39,7 @@ const Frame = () => {
                                     </svg>
                                 </div>
                                 <div className="item-desc">Sair</div>
-                            </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -41,44 +48,10 @@ const Frame = () => {
                     <div className="section-area active-section">
                         <div className="section-header">
                             <div className="logo-header"></div>
-                            <h1 className="title-header">Tela 1</h1>
+                            <h1 className="title-header">{pageDescription}</h1>
                         </div>
                         <div className="section-body">
-                            <div className="conteudo-principal">
-                                <div className="card">
-                                    <div className="caixa">
-                                        <div className="lado-esquerdo">
-                                            <div className="titulo-card">RECEITAS TOTAIS</div>
-                                            <div className="conteudo-card">R$ 25.868,78</div>
-                                            <div className="indicador-card">Subiu</div>
-                                        </div>
-                                    </div>
-
-                                    <div className="caixa">
-                                        <div className="lado-esquerdo">
-                                            <div className="titulo-card">TOTAL DE ENTREGAS REALIZDAS/MES</div>
-                                            <div className="conteudo-card">255</div>
-                                            <div className="indicador-card">Subiu</div>
-                                        </div>
-                                    </div>
-
-                                    <div className="caixa">
-                                        <div className="lado-esquerdo">
-                                            <div className="titulo-card">DATA:</div>
-                                            <div className="conteudo-card">DIA/MES/ANO</div>
-                                            <div className="indicador-card">HORARIO ATUAL</div>
-                                        </div>
-                                    </div>
-
-                                    <div className="caixa">
-                                        <div className="lado-esquerdo">
-                                            <div className="titulo-card">VEICULOS DIPONIVEIS PRA SERVIÇO</div>
-                                            <div className="conteudo-card">12</div>
-                                            <div className="indicador-card">Subiu</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <PageController page={page} />
                         </div>
                     </div>
                 </section>

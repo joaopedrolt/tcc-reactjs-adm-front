@@ -1,7 +1,12 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import GlDashBoard from "./gl/GlDashBoard";
 
-export const GlItens = () => {
+type Props = {
+    setPage: React.Dispatch<React.SetStateAction<JSX.Element>>;
+}
+
+export const GlItens = ({ setPage }: Props) => {
 
     let [active, setActive] = useState<number>(1);
 
@@ -14,12 +19,15 @@ export const GlItens = () => {
         switch (type) {
             case 1:
                 navigate("/gl/dashboard");
+                setPage(GlDashBoard)
                 break;
             case 2:
                 navigate("/gl/pedidos");
+                setPage(<></>)
                 break;
             case 3:
                 navigate("/gl/transporte");
+                setPage(<></>)
                 break;
         }
 
