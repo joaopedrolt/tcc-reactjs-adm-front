@@ -1,0 +1,20 @@
+/* Colocar estilos padronizados para todas as telas */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Adicione apartir daqui, nao mexer no em cima */
+

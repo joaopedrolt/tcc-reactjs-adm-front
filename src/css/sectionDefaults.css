@@ -1,0 +1,286 @@
+/* Estrutura padrao das telas */
+
+/* Cabeçalho das telas */
+
+.section-area {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    padding: 45px 70px 40px 70px;
+}
+
+.logo-header {
+    background-image: url('./images/logo.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 500px;
+    height: 150px;
+    transition: all 0.5s ease;
+}
+
+.logo-header:hover {
+    transform: scale(1.05);
+}
+
+.title-header {
+    border: #302c2c;
+    text-transform: uppercase;
+    color: #302c2c;
+    font-weight: 400;
+    font-size: 30px;
+}
+
+.active-section {
+    display: flex;
+}
+
+.section-header {
+    height: 170px;
+    border-top: 1px solid #D6671A;
+    border-bottom: 1px solid #D6671A;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 150px;
+    background-color: #f4f5ed;
+    margin-bottom: 40px;
+}
+
+/* Botão Add */
+
+.button-add {
+    background-color: #58bb43;
+    display: flex;
+    padding: 17px;
+    justify-content: center;
+    align-items: center;
+    color: #fefefc;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    transform: scale(1);
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    text-decoration: none;
+}
+
+/* Design das tabelas -- Foi feito na correria, revisar e aprimorar ou fazer outro 
+                         que condiza com o estilo já padronizado */
+
+.table-area {
+    display: flex;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    margin-bottom: 200px;
+}
+
+.table {
+    flex-grow: 1;
+}
+
+.table-columns {
+    height: 50px;
+    background-color: #D6671A;
+    display: flex;
+    border-top: 1px solid #383838;
+    border-bottom: 1px solid #383838;
+    border-radius: 10px 10px 0 0;
+}
+
+.corner {
+    height: 48px;
+    width: 50px;
+    background-color: #D6671A;
+    border-right: 1px solid #383838;
+    border-radius: 10px 0 0 0;
+    border-left: 1px solid #383838;
+}
+
+.corner:last-child {
+    border-radius: 0 10px 0 0;
+    border-left: 0;
+}
+
+.columns-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    border-right: 1px solid #383838;
+    height: 50px;
+    flex: 1;
+    font-weight: bold;
+    color: #F4F5ED;
+}
+
+.erase {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #D6671A;
+    border-bottom: 1px solid #383838;
+    cursor: pointer;
+    border-left: 1px solid #383838;
+    border-right: 1px solid #383838;
+    border-radius: 0;
+}
+
+.erase svg {
+    fill: #F4F5ED;
+    height: 18px;
+    width: 18px;
+    transition: all 0.5s ease;
+}
+
+.erase svg:hover {
+    transform: scale(1.50);
+}
+
+.columns-title:first-child {
+    border-left: 1px solid #383838;
+}
+
+.table-rows {
+    height: 50px;
+    display: flex;
+    border-top: 1px solid #383838;
+    border-bottom: 1px solid #383838;
+}
+
+.table-rows:first-child {
+    border-top: none;
+}
+
+.row-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #383838;
+    height: 50px;
+    flex: 1;
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.row-info:first-child {
+    border-left: 1px solid #383838;
+}
+
+.edit {
+    border-right: 1px solid #383838;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #D6671A;
+    border-bottom: 1px solid #383838;
+    cursor: pointer;
+}
+
+.edit:first-child {
+    background-color: #D6671A;
+    cursor: auto;
+    border-radius: 0 10px 0 0;
+    border-top: 1px solid #383838;
+}
+
+.edit svg {
+    fill: #F4F5ED;
+    height: 18px;
+    width: 18px;
+    transition: all 0.5s ease;
+}
+
+.edit svg:hover {
+    transform: scale(1.50);
+}
+
+.id {
+    flex: none;
+    width: 100px;
+}
+
+.name {
+    text-transform: capitalize;
+}
+
+#bar-example-11 {
+    height: 200px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* Padrao formularios */
+
+.add-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+}
+
+select {
+    margin-top: 15px;
+    margin-bottom: 25px;
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+    position: relative;
+    width: 140px;
+    height: 35px;
+    border: 1px solid var(--select-border);
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1.1;
+    background-color: #fff;
+    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
+option {
+    font-weight: normal;
+    display: block;
+    white-space: nowrap;
+    min-height: 1.2em;
+    padding: 0px 2px 1px;
+}
+
+.add-area {
+    margin: 0 auto 0 auto;
+}
+
+input,
+button {
+    outline: none;
+    border: 0;
+    border-radius: 8px;
+}
+
+input[type="text"] {
+    background-color: #fefefc;
+    padding: 16px 16px 16px 16px;
+    width: 100%;
+    font-size: 16px;
+    color: #2F2F2F;
+    margin-bottom: 10px;
+}
+
+.none {
+    display: none;
+}
+
+.input-ghost {
+    display: none;
+}
+
+.select-pedidos {
+    width: 300px;
+}

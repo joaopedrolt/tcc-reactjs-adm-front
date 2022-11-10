@@ -1,0 +1,18 @@
+/* Estrutura da divisao das sections
+              NAO MEXER
+*/
+
+.frame {
+    display: flex;
+    /* overflow-y: hidden; */
+}
+
+.section {
+    flex-grow: 1;
+    background-color: #F4F5ED;
+}
+
+.menu-frame-fill {
+    height: 100vh;
+    min-width: 255px;
+}

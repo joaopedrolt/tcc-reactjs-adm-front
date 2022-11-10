@@ -1,18 +1,23 @@
 import { Route, Routes } from "react-router-dom";
+import RequireAuth from "../RequireAuth";
+import Login from "../components/login/Login";
+import Frame from "../components/Frame";
 
-function MainRoutes() {
+const MainRoutes = () => {
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Login />} />
+      </Routes>
+      <Routes>
+        <Route path="/gl/:slug" element={
+          <RequireAuth>
+            <Frame />
+          </RequireAuth>
+        } />
+      </Routes>
+    </>
+  )
+}
 
-
-    return (
-      <>
-        <Route ></Route>
-        <Routes>
-
-
-        </Routes> 
-      </>
-    )
-  }
-  
-  export default MainRoutes;
-  
+export default MainRoutes;
