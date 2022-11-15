@@ -3,34 +3,34 @@ import "../../css/gl/gldashboard.css";
 const GlDashBoard = () => {
 
     return (
-        <div className="conteudo-principal">
+        <div className="main-content">
             <div className="card">
-                <div className="caixa">
-                    <div className="lado-esquerdo">
-                        <div className="titulo-card">RECEITAS TOTAIS</div>
-                        <div className="conteudo-card">R$ 25.868,78</div>
-                        <div className="indicador-card">Subiu</div>
+                <div className="box">
+                    <div className="left-side">
+                        <div className="title-card">RECEITAS TOTAIS</div>
+                        <div className="content-card">R$ 25.868,78</div>
+                        <div className="index-card">Subiu</div>
                     </div>
                 </div>
-                <div className="caixa">
-                    <div className="lado-esquerdo">
-                        <div className="titulo-card">TOTAL DE ENTREGAS REALIZDAS/MES</div>
-                        <div className="conteudo-card">255</div>
-                        <div className="indicador-card">Subiu</div>
+                <div className="box">
+                    <div className="left-side">
+                        <div className="title-card">TOTAL DE ENTREGAS REALIZDAS/MES</div>
+                        <div className="content-card">255</div>
+                        <div className="index-card">Subiu</div>
                     </div>
                 </div>
-                <div className="caixa">
-                    <div className="lado-esquerdo">
-                        <div className="titulo-card">DATA:</div>
-                        <div className="conteudo-card">DIA/MES/ANO</div>
-                        <div className="indicador-card">HORARIO ATUAL</div>
+                <div className="box">
+                    <div className="left-side">
+                        <div className="title-card">DATA:</div>
+                        <div className="content-card">DIA/MES/ANO</div>
+                        <div className="index-card">HORARIO ATUAL</div>
                     </div>
                 </div>
-                <div className="caixa">
-                    <div className="lado-esquerdo">
-                        <div className="titulo-card">VEICULOS DIPONIVEIS PRA SERVIÇO</div>
-                        <div className="conteudo-card">12</div>
-                        <div className="indicador-card">Subiu</div>
+                <div className="box">
+                    <div className="left-side">
+                        <div className="title-card">VEICULOS DIPONIVEIS PRA SERVIÇO</div>
+                        <div className="content-card">12</div>
+                        <div className="index-card">Subiu</div>
                     </div>
                 </div>
             </div>

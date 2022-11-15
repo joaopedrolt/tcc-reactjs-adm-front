@@ -1,7 +1,7 @@
 import "../css/default.css";
 import "../css/frame.css";
 import "../css/menu.css";
-import "../css/sectionDefaults.css";
+import "../css/sectiondefaults.css";
 import { GlItens } from "./MenuItens";
 import PageController from "./PageController";
 import { useState } from "react";

@@ -1,12 +1,4 @@
-body {
-    font-family: Montserrat;
-}
-
-.conteudo-principal {
-    position: relative;
-}
-
-.conteudo-principal .card {
+.main-content .card {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -14,30 +6,31 @@ body {
     padding: 0 20px;
     flex-wrap: wrap;
 }
-.conteudo-principal .card .caixa {
+
+.main-content .card .box {
     text-align: center;
     display: inline-block;
     align-items: center;
-    padding: 15px 14px;
-    background-color: #fff;
+    padding: 50px 0;
     width: calc(100% / 2 - 15px);
     border-radius: 12px;
     margin-top: 15px;
+    border: 1px solid #d1844d;
 }
 
-.conteudo-principal .card .titulo-card {
+.main-content .card .title-card {
     font-size: 20px;
     font-weight: 500;
 }
 
-.conteudo-principal .card .conteudo-card {
+.main-content .card .content-card {
     font-size: 35px;
     font-weight: 500;
     margin-top: -5px;
     display: inline-block;
 }
 
-.card .indicador-card {
+.card .index-card {
     display: block;
     align-items: center;
     font-size: 12px;

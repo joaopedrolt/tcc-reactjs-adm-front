@@ -16,5 +16,10 @@ ul {
     margin: 0;
 }
 
-/* Adicione apartir daqui, nao mexer no em cima */
+.flex-colunm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+/* Adicione apartir daqui, nao mexer no em cima */

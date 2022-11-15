@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import GlDashBoard from "./gl/GlDashBoard";
+import GlPedidos from "./gl/GlPedidos";
+import GlTransportes from "./gl/GlTransportes";
 
 type Props = {
     setPage: React.Dispatch<React.SetStateAction<JSX.Element>>;
@@ -19,15 +21,15 @@ export const GlItens = ({ setPage }: Props) => {
         switch (type) {
             case 1:
                 navigate("/gl/dashboard");
-                setPage(GlDashBoard)
+                setPage(GlDashBoard);
                 break;
             case 2:
                 navigate("/gl/pedidos");
-                setPage(<></>)
+                setPage(GlPedidos);
                 break;
             case 3:
                 navigate("/gl/transporte");
-                setPage(<></>)
+                setPage(GlTransportes);
                 break;
         }
 

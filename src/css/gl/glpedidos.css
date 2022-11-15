@@ -1,0 +1,44 @@
+.orders-container {
+    width: 80%;
+    padding: 25px 30px;
+    margin: 0 auto;
+    border: 1px solid #d1844d;
+    border-radius: 30px;
+    margin-bottom: 15px;
+}
+
+.row {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.content-field {
+    padding: 14px 10px;
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.field {
+    width: 100%;
+}
+
+.field-small {
+    width: 32.4%;
+}
+
+.button-orders {
+    padding: 14px 130px;
+    margin-top: 12px;
+    background-color: #d1844d;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.button-orders:hover {
+    transform: scale(102%);
+}
