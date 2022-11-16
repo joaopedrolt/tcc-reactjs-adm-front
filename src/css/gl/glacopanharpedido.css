@@ -1,0 +1,59 @@
+.order-overview-container {
+    width: 90%;
+    padding: 25px 30px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+.order-overview-top{
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+.order-overview-bottom{
+    margin-top: 50px;
+}
+
+.select-order{
+    margin-top: 5px;
+    width: 90%;
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+    position: relative;
+    height: 49px;
+    padding: 14px 10px;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.button-overwiew {
+    height: 47px;
+    width: 100%;
+    margin-bottom: 2px;
+    background-color: #d1844d;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#button-c-field{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#truck-card-overview{
+    width: auto !important;
+    padding: 30px 40px;
+}
+
+#driver-card-overview{
+    width: auto !important;
+    padding: 30px 40px;
+}

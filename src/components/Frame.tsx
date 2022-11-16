@@ -1,19 +1,20 @@
+import { NavigateFunction } from "react-router-dom";
+
 import "../css/default.css";
 import "../css/frame.css";
 import "../css/menu.css";
 import "../css/sectiondefaults.css";
+
 import { GlItens } from "./MenuItens";
 import PageController from "./PageController";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
 
-const Frame = () => {
+type Props = {
+    page: JSX.Element;
+    currentTab: string;
+    navigate: NavigateFunction;
+}
 
-    const [page, setPage] = useState(<></>);
-
-    const params = useParams();
-    let pageDescription = params.slug == undefined ? "" : params.slug;
-
+const Frame = ({ page, currentTab, navigate }: Props) => {
     return (
         <>
             <div className="frame">
@@ -26,7 +27,7 @@ const Frame = () => {
                     <div className="bottom-segment">
                         <nav>
                             <ul className="menu-nav">
-                                <GlItens setPage={setPage} />
+                                <GlItens navigate={navigate} />
                             </ul>
                         </nav>
                         <form className="form-ghost config" method="post">
@@ -48,7 +49,7 @@ const Frame = () => {
                     <div className="section-area active-section">
                         <div className="section-header">
                             <div className="logo-header"></div>
-                            <h1 className="title-header">{pageDescription}</h1>
+                            <h1 className="title-header">{currentTab}</h1>
                         </div>
                         <div className="section-body">
                             <PageController page={page} />

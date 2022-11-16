@@ -1,5 +1,5 @@
 import FormContent from "./FormContent";
-import login from "../../css/login.css"
+import "../../css/login.css"
 
 const Login = () => {
 
