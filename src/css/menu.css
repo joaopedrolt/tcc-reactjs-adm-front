@@ -46,7 +46,7 @@ p {
 }
 
 .joao {
-    background-image: url('./images/avatar/joao.jpeg');
+    /* background-image: url(); */
     background-position: center;
     background-size: cover;
 }

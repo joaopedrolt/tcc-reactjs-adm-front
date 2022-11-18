@@ -1,9 +1,15 @@
 import { NavigateFunction } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import "../../css/gl/gldashboard.css";
 import "../../css/gl/glmotoristas.css";
 import "../../css/gl/glpedidos.css";
 import "../../css/gl/gltransportes.css";
 import "../../css/gl/glacopanharpedido.css";
+
+import GlApi from "../../api/GestorLogisticoApi";
+import { Truck } from "../../types/Truck";
+
 
 type PedidosProps = {
     navigate: NavigateFunction;
@@ -52,7 +58,7 @@ export const Motoristas = () => {
 
     return (
         <div className="flex-colunm">
-            <h1 className="drivers-title">Situação Motoristas</h1>
+            <h1 className="drivers-title"></h1>
             <div className="drivers">
                 <div className="driver-card">
                     <div className="driver-card-top flex-colunm">
@@ -398,110 +404,60 @@ export const AcompanharPedidos = () => {
 
 export const Transportes = () => {
 
+    let [garage, setGarage] = useState<Truck[]>([]);
+    let [loading, setLoadStatus] = useState(true);
+ 
+    const api = new GlApi();
+
+    async function Get() {
+        try {
+            let trucks = await api.getGarage();
+            if (trucks.length > 0) {
+                setGarage(trucks);
+                setLoadStatus(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    Get();
+
     return (
         <div className="flex-colunm">
             <h1 className="garage-title">Veículos disponíveis</h1>
             <div className="garage">
-                <div className="truck-card">
-                    <div className="truck-card-top flex-colunm">
-                        <div className="truck-img-container"></div>
-                        <h3 className="truck-name">Merces Beazn 55 300</h3>
-                    </div>
-                    <div className="truck-card-bottom flex-colunm">
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Tipo de Eixo</h4>
-                            <p className="truck-info">Eixos triplos</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Capacidade Maxima</h4>
-                            <p className="truck-info">1 Tonelada</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Quantidade Disponivel p/ Transporte</h4>
-                            <p className="truck-info">400 kilos</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="truck-card">
-                    <div className="truck-card-top flex-colunm">
-                        <div className="truck-img-container"></div>
-                        <h3 className="truck-name">Merces Beazn 55 300</h3>
-                    </div>
-                    <div className="truck-card-bottom flex-colunm">
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Tipo de Eixo</h4>
-                            <p className="truck-info">Eixos triplos</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Capacidade Maxima</h4>
-                            <p className="truck-info">1 Tonelada</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Quantidade Disponivel p/ Transporte</h4>
-                            <p className="truck-info">400 kilos</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="truck-card">
-                    <div className="truck-card-top flex-colunm">
-                        <div className="truck-img-container"></div>
-                        <h3 className="truck-name">Merces Beazn 55 300</h3>
-                    </div>
-                    <div className="truck-card-bottom flex-colunm">
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Tipo de Eixo</h4>
-                            <p className="truck-info">Eixos triplos</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Capacidade Maxima</h4>
-                            <p className="truck-info">1 Tonelada</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Quantidade Disponivel p/ Transporte</h4>
-                            <p className="truck-info">400 kilos</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="truck-card">
-                    <div className="truck-card-top flex-colunm">
-                        <div className="truck-img-container"></div>
-                        <h3 className="truck-name">Merces Beazn 55 300</h3>
-                    </div>
-                    <div className="truck-card-bottom flex-colunm">
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Tipo de Eixo</h4>
-                            <p className="truck-info">Eixos triplos</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Capacidade Maxima</h4>
-                            <p className="truck-info">1 Tonelada</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Quantidade Disponivel p/ Transporte</h4>
-                            <p className="truck-info">400 kilos</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="truck-card">
-                    <div className="truck-card-top flex-colunm">
-                        <div className="truck-img-container"></div>
-                        <h3 className="truck-name">Merces Beazn 55 300</h3>
-                    </div>
-                    <div className="truck-card-bottom flex-colunm">
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Tipo de Eixo</h4>
-                            <p className="truck-info">Eixos triplos</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Capacidade Maxima</h4>
-                            <p className="truck-info">1 Tonelada</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Quantidade Disponivel p/ Transporte</h4>
-                            <p className="truck-info">400 kilos</p>
-                        </div>
-                    </div>
-                </div>
+
+                {!loading &&
+                    <>
+                        {garage.map((truck, index) => (
+                            <div key={index} className="truck-card">
+                                <div className="truck-card-top flex-colunm">
+                                    <div className="truck-img-container"></div>
+                                    <h3 className="truck-name">{truck.model}</h3>
+                                </div>
+                                <div className="desc-row">
+                                    <h4 className="truck-desc">Placa</h4>
+                                    <p className="truck-info">{truck.plateNumber}</p>
+                                </div>
+                                <div className="truck-card-bottom flex-colunm">
+                                    <div className="desc-row">
+                                        <h4 className="truck-desc">Tipo de Eixo</h4>
+                                        <p className="truck-info">{truck.axle}</p>
+                                    </div>
+                                    <div className="desc-row">
+                                        <h4 className="truck-desc">Capacidade Maxima</h4>
+                                        <p className="truck-info">{truck.maxcapacity}</p>
+                                    </div>
+                                    <div className="desc-row">
+                                        <h4 className="truck-desc">Status</h4>
+                                        <p className="truck-info">{truck.status ? "Disponivel" : "Indisponivel"}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))} </>
+                }
+
             </div>
             <button className="button-manage">Gerenciar Veículos</button>
         </div>
