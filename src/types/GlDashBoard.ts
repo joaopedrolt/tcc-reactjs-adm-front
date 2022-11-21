@@ -1,5 +1,5 @@
 export type GlDashBoard = {
-    yield: number;
+    yield: string;
     deliveries: number;
     available: number;
     date: string;

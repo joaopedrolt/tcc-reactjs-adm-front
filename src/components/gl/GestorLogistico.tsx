@@ -26,7 +26,7 @@ type PedidosProps = {
 export const DashBoard = () => {
 
     let [info, setInfo] = useState<GlDashBoard>({
-        yield: 0,
+        yield: '0,00',
         deliveries: 0,
         available: 0,
         date: "DIA/MES/ANO"
@@ -35,16 +35,14 @@ export const DashBoard = () => {
     const api = new GlApi();
     const timezone = new TimeZone();
 
-    let spTimeZone = timezone.getSPTimeZone();
-    console.log(spTimeZone)
-
     useEffect(() => {
         async function Get() {
             try {
                 let info = await api.getGlDashBoard();
+                let dateSp = await timezone.getSPDate()
                 if (info.yield) {
-                    info.date
-                    setInfo(info);
+                    let infoCopy = { ...info, date: dateSp };
+                    setInfo(infoCopy);
                 }
             } catch (error) {
                 console.log(error);
@@ -59,7 +57,7 @@ export const DashBoard = () => {
                 <div className="box">
                     <div className="left-side">
                         <div className="title-card">RECEITAS TOTAIS</div>
-                        <div className="content-card">R$ {info.yield}</div>
+                        <div className="content-card">{info.yield}</div>
                         <div className="index-card">Subiu</div>
                     </div>
                 </div>
@@ -73,7 +71,7 @@ export const DashBoard = () => {
                 <div className="box">
                     <div className="left-side">
                         <div className="title-card">DATA:</div>
-                        <div className="content-card">DIA/MES/ANO</div>
+                        <div className="content-card">{info.date}</div>
                         <div className="index-card">HORARIO ATUAL</div>
                     </div>
                 </div>
