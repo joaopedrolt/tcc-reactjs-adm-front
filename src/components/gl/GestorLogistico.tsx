@@ -1,19 +1,23 @@
 import { NavigateFunction, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import Select from "react-select";
+import OrdersSelectStyle from "../../assets/select-styles/OrdersSelect";
+
 import "../../css/gl/gldashboard.css";
 import "../../css/gl/glmotoristas.css";
 import "../../css/gl/glpedidos.css";
 import "../../css/gl/gltransportes.css";
 import "../../css/gl/glacopanharpedido.css";
 
-import GlApi from "../../api/GestorLogisticoApi";
+import GlApi from "../../api/GestorLogistico.api";
 
 import { Truck } from "../../types/Truck";
 import { Order } from "../../types/Order";
 import { Driver } from "../../types/Driver";
 import { GlDashBoard } from "../../types/GlDashBoard";
-
+import { Option } from "../../types/Option";
+import TimeZone from "../../api/TimeZone.api";
 
 type PedidosProps = {
     navigate: NavigateFunction;
@@ -24,16 +28,22 @@ export const DashBoard = () => {
     let [info, setInfo] = useState<GlDashBoard>({
         yield: 0,
         deliveries: 0,
-        available: 0
+        available: 0,
+        date: "DIA/MES/ANO"
     });
 
     const api = new GlApi();
+    const timezone = new TimeZone();
+
+    let spTimeZone = timezone.getSPTimeZone();
+    console.log(spTimeZone)
 
     useEffect(() => {
         async function Get() {
             try {
                 let info = await api.getGlDashBoard();
                 if (info.yield) {
+                    info.date
                     setInfo(info);
                 }
             } catch (error) {
@@ -42,9 +52,6 @@ export const DashBoard = () => {
         };
         Get();
     }, [])
-
-
-
 
     return (
         <div className="main-content">
@@ -105,7 +112,7 @@ export const Motoristas = () => {
 
     return (
         <div className="flex-colunm">
-            <h1 className="drivers-title"></h1>
+            <h1 className="drivers-title">Situação Motoristas</h1>
             <div className="drivers">
 
                 {drivers.map((driver, index) => (
@@ -135,6 +142,9 @@ export const Motoristas = () => {
 export const Pedidos = ({ navigate }: PedidosProps) => {
 
     let [orders, setOrders] = useState<Order[]>([]);
+    let options: Option[] = [];
+    let isTherePending: boolean = false;
+    let isThereOngoing: boolean = false;
 
     const api = new GlApi();
 
@@ -157,63 +167,156 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
         navigate(path);
     }
 
+    const HandleChange = async (selectedOption: any) => {
+        if (selectedOption) {
+            let order = orders.filter(a => a._id == selectedOption.value)
+            setOrders(order);
+        } else {
+            try {
+                let orders = await api.getOrders();
+                if (orders.length > 0) {
+                    setOrders(orders);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+    orders.map((order) => {
+        options.push({ label: order.desc, value: order._id });
+        if (!order.status) {
+            isTherePending = true;
+        } else {
+            isThereOngoing = true;
+        }
+    })
+
     return (
         <>
-            {orders.map((order, index) => (
-                <div key={index} className="orders-container">
-                    <div className="order">
-                        <div className="row">
-                            <div className="field" id="desc-field">
-                                <span>Descrição</span>
-                                <div className="content-field">{order.desc}</div>
+            <Select isClearable options={options} placeholder={"Selecione o Pedido"} styles={OrdersSelectStyle} onChange={HandleChange} />
+            <h1 className="orders-title">{isTherePending ? 'Pendentes' : ''}</h1>
+            {orders.map((order, index) => {
+                let status = order.status;
+                if (!status) {
+                    return (
+                        <div key={index} className="orders-container">
+                            <div className="order">
+                                <div className="row">
+                                    <div className="field" id="desc-field">
+                                        <span>Descrição</span>
+                                        <div className="content-field">{order.desc}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="id-field">
+                                        <span>ID Pedido</span>
+                                        <div className="content-field">{order._id}</div>
+                                    </div>
+                                    <div className="field" id="size-field">
+                                        <span>Dimensão da Caixa</span>
+                                        <div className="content-field">{order.size}</div>
+                                    </div>
+                                    <div className="field" id="weith-field">
+                                        <span>Peso Total Unitario</span>
+                                        <div className="content-field">{order.weight}</div>
+                                    </div>
+                                    <div className="field" id="amount-field">
+                                        <span>Quantidade Total</span>
+                                        <div className="content-field">{order.amount}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-in-field">
+                                        <span>Endereço de Retirada</span>
+                                        <div className="content-field">{order.addressout}</div>
+                                    </div>
+                                    <div className="field-small" id="load-field">
+                                        <span>Ocupação Bau</span>
+                                        <div className="content-field">{order.container}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-out-field">
+                                        <span>Endereço de Entrega</span>
+                                        <div className="content-field">{order.addressin}</div>
+                                    </div>
+                                    <div className="field-small" id="status-field">
+                                        <span>Status</span>
+                                        <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div>
+                                        <button className="button-orders" onClick={() => { HandleClick(order._id) }} >Acompanhar Pedido</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="field" id="id-field">
-                                <span>ID Pedido</span>
-                                <div className="content-field">{order._id}</div>
-                            </div>
-                            <div className="field" id="size-field">
-                                <span>Dimensão da Caixa</span>
-                                <div className="content-field">{order.size}</div>
-                            </div>
-                            <div className="field" id="weith-field">
-                                <span>Peso Total Unitario</span>
-                                <div className="content-field">{order.weight}</div>
-                            </div>
-                            <div className="field" id="amount-field">
-                                <span>Quantidade Total</span>
-                                <div className="content-field">{order.amount}</div>
+                    )
+                }
+            })}
+            <h1 className="orders-title">{isThereOngoing ? 'Em andamento' : ''}</h1>
+            {orders.map((order, index) => {
+                let status = order.status;
+                if (status) {
+                    return (
+                        <div key={index} className="orders-container">
+                            <div className="order">
+                                <div className="row">
+                                    <div className="field" id="desc-field">
+                                        <span>Descrição</span>
+                                        <div className="content-field">{order.desc}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="id-field">
+                                        <span>ID Pedido</span>
+                                        <div className="content-field">{order._id}</div>
+                                    </div>
+                                    <div className="field" id="size-field">
+                                        <span>Dimensão da Caixa</span>
+                                        <div className="content-field">{order.size}</div>
+                                    </div>
+                                    <div className="field" id="weith-field">
+                                        <span>Peso Total Unitario</span>
+                                        <div className="content-field">{order.weight}</div>
+                                    </div>
+                                    <div className="field" id="amount-field">
+                                        <span>Quantidade Total</span>
+                                        <div className="content-field">{order.amount}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-in-field">
+                                        <span>Endereço de Retirada</span>
+                                        <div className="content-field">{order.addressout}</div>
+                                    </div>
+                                    <div className="field-small" id="load-field">
+                                        <span>Ocupação Bau</span>
+                                        <div className="content-field">{order.container}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-out-field">
+                                        <span>Endereço de Entrega</span>
+                                        <div className="content-field">{order.addressin}</div>
+                                    </div>
+                                    <div className="field-small" id="status-field">
+                                        <span>Status</span>
+                                        <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div>
+                                        <button className="button-orders" onClick={() => { HandleClick(order._id) }} >Acompanhar Pedido</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="field" id="address-in-field">
-                                <span>Endereço de Retirada</span>
-                                <div className="content-field">{order.addressout}</div>
-                            </div>
-                            <div className="field-small" id="load-field">
-                                <span>Ocupação Bau</span>
-                                <div className="content-field">{order.container}</div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="field" id="address-out-field">
-                                <span>Endereço de Entrega</span>
-                                <div className="content-field">{order.addressin}</div>
-                            </div>
-                            <div className="field-small" id="status-field">
-                                <span>Status</span>
-                                <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div>
-                                <button className="button-orders" onClick={() => { HandleClick(order._id) }} >Acompanhar Pedido</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ))}
+                    )
+                }
+            })}
         </>
     )
 
