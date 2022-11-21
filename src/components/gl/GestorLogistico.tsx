@@ -1,4 +1,4 @@
-import { NavigateFunction } from "react-router-dom";
+import { NavigateFunction, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import "../../css/gl/gldashboard.css";
@@ -8,7 +8,11 @@ import "../../css/gl/gltransportes.css";
 import "../../css/gl/glacopanharpedido.css";
 
 import GlApi from "../../api/GestorLogisticoApi";
+
 import { Truck } from "../../types/Truck";
+import { Order } from "../../types/Order";
+import { Driver } from "../../types/Driver";
+import { GlDashBoard } from "../../types/GlDashBoard";
 
 
 type PedidosProps = {
@@ -17,20 +21,45 @@ type PedidosProps = {
 
 export const DashBoard = () => {
 
+    let [info, setInfo] = useState<GlDashBoard>({
+        yield: 0,
+        deliveries: 0,
+        available: 0
+    });
+
+    const api = new GlApi();
+
+    useEffect(() => {
+        async function Get() {
+            try {
+                let info = await api.getGlDashBoard();
+                if (info.yield) {
+                    setInfo(info);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        Get();
+    }, [])
+
+
+
+
     return (
         <div className="main-content">
             <div className="card">
                 <div className="box">
                     <div className="left-side">
                         <div className="title-card">RECEITAS TOTAIS</div>
-                        <div className="content-card">R$ 25.868,78</div>
+                        <div className="content-card">R$ {info.yield}</div>
                         <div className="index-card">Subiu</div>
                     </div>
                 </div>
                 <div className="box">
                     <div className="left-side">
                         <div className="title-card">TOTAL DE ENTREGAS REALIZDAS/MES</div>
-                        <div className="content-card">255</div>
+                        <div className="content-card">{info.deliveries}</div>
                         <div className="index-card">Subiu</div>
                     </div>
                 </div>
@@ -44,7 +73,7 @@ export const DashBoard = () => {
                 <div className="box">
                     <div className="left-side">
                         <div className="title-card">VEICULOS DIPONIVEIS PRA SERVIÇO</div>
-                        <div className="content-card">12</div>
+                        <div className="content-card">{info.available}</div>
                         <div className="index-card">Subiu</div>
                     </div>
                 </div>
@@ -56,110 +85,47 @@ export const DashBoard = () => {
 
 export const Motoristas = () => {
 
+    let [drivers, setDrivers] = useState<Driver[]>([]);
+
+    const api = new GlApi();
+
+    useEffect(() => {
+        async function Get() {
+            try {
+                let drivers = await api.getDrivers();
+                if (drivers.length > 0) {
+                    setDrivers(drivers);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        Get();
+    }, [])
+
     return (
         <div className="flex-colunm">
             <h1 className="drivers-title"></h1>
             <div className="drivers">
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Em entrega</p>
+
+                {drivers.map((driver, index) => (
+                    <div className="driver-card">
+                        <div className="driver-card-top flex-colunm">
+                            <div className="driver-img-container"></div>
+                            <h3 className="driver-name">{driver.name}</h3>
+                        </div>
+                        <div className="driver-card-bottom">
+                            <div className="desc-row flex-colunm">
+                                <h4 className="driver-desc">Status</h4>
+                                <p className="driver-info">{driver.status ? 'Disponivel' : 'Em entrega'}</p>
+                            </div>
+                            <div className="desc-row flex-colunm">
+                                <h4 className="driver-desc">{driver.orderid ? 'Pedido ID' : ''}</h4>
+                                <p className="driver-info">{driver.orderid ? driver.orderid : ''}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Disponivel</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Em entrega</p>
-                        </div>
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Pedido ID</h4>
-                            <p className="driver-info">001</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Em entrega</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Em entrega</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Em entrega</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Em entrega</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="driver-card">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Em entrega</p>
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
         </div>
     )
@@ -168,6 +134,24 @@ export const Motoristas = () => {
 
 export const Pedidos = ({ navigate }: PedidosProps) => {
 
+    let [orders, setOrders] = useState<Order[]>([]);
+
+    const api = new GlApi();
+
+    useEffect(() => {
+        async function Get() {
+            try {
+                let orders = await api.getOrders();
+                if (orders.length > 0) {
+                    setOrders(orders);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        Get();
+    }, [])
+
     const HandleClick = (id: number) => {
         let path = "/gl/pedidos/" + id;
         navigate(path);
@@ -175,116 +159,98 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
 
     return (
         <>
-            <div className="orders-container">
-                <div className="order">
-                    <div className="row">
-                        <div className="field" id="desc-field">
-                            <span>Descrição</span>
-                            <div className="content-field">3 KILOS DE BOMBA DE TRIOG</div>
+            {orders.map((order, index) => (
+                <div key={index} className="orders-container">
+                    <div className="order">
+                        <div className="row">
+                            <div className="field" id="desc-field">
+                                <span>Descrição</span>
+                                <div className="content-field">{order.desc}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="field" id="id-field">
-                            <span>ID Pedido</span>
-                            <div className="content-field">2</div>
+                        <div className="row">
+                            <div className="field" id="id-field">
+                                <span>ID Pedido</span>
+                                <div className="content-field">{order._id}</div>
+                            </div>
+                            <div className="field" id="size-field">
+                                <span>Dimensão da Caixa</span>
+                                <div className="content-field">{order.size}</div>
+                            </div>
+                            <div className="field" id="weith-field">
+                                <span>Peso Total Unitario</span>
+                                <div className="content-field">{order.weight}</div>
+                            </div>
+                            <div className="field" id="amount-field">
+                                <span>Quantidade Total</span>
+                                <div className="content-field">{order.amount}</div>
+                            </div>
                         </div>
-                        <div className="field" id="size-field">
-                            <span>Dimensão da Caixa</span>
-                            <div className="content-field">22m</div>
+                        <div className="row">
+                            <div className="field" id="address-in-field">
+                                <span>Endereço de Retirada</span>
+                                <div className="content-field">{order.addressout}</div>
+                            </div>
+                            <div className="field-small" id="load-field">
+                                <span>Ocupação Bau</span>
+                                <div className="content-field">{order.container}</div>
+                            </div>
                         </div>
-                        <div className="field" id="weith-field">
-                            <span>Peso Total Unitario</span>
-                            <div className="content-field">44kg</div>
+                        <div className="row">
+                            <div className="field" id="address-out-field">
+                                <span>Endereço de Entrega</span>
+                                <div className="content-field">{order.addressin}</div>
+                            </div>
+                            <div className="field-small" id="status-field">
+                                <span>Status</span>
+                                <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
+                            </div>
                         </div>
-                        <div className="field" id="amount-field">
-                            <span>Quantidade Total</span>
-                            <div className="content-field">4</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="field" id="address-in-field">
-                            <span>Endereço de Retirada</span>
-                            <div className="content-field">Rua etore caraturadsad 3 - jardim</div>
-                        </div>
-                        <div className="field-small" id="load-field">
-                            <span>Ocupação Bau</span>
-                            <div className="content-field">2</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="field" id="address-out-field">
-                            <span>Endereço de Entrega</span>
-                            <div className="content-field">Rua etore caraturadsad 3 - jardim</div>
-                        </div>
-                        <div className="field-small" id="status-field">
-                            <span>Status</span>
-                            <div className="content-field">2</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div>
-                            <button onClick={() => { HandleClick(1) }} className="button-orders">Acompanhar Pedido</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="order">
-                    <div className="row">
-                        <div className="field" id="desc-field">
-                            <span>Descrição</span>
-                            <div className="content-field">3 KILOS DE BOMBA DE TRIOG</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="field" id="id-field">
-                            <span>ID Pedido</span>
-                            <div className="content-field">2</div>
-                        </div>
-                        <div className="field" id="size-field">
-                            <span>Dimensão da Caixa</span>
-                            <div className="content-field">22m</div>
-                        </div>
-                        <div className="field" id="weith-field">
-                            <span>Peso Total Unitario</span>
-                            <div className="content-field">44kg</div>
-                        </div>
-                        <div className="field" id="amount-field">
-                            <span>Quantidade Total</span>
-                            <div className="content-field">4</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="field" id="address-in-field">
-                            <span>Endereço de Retirada</span>
-                            <div className="content-field">Rua etore caraturadsad 3 - jardim</div>
-                        </div>
-                        <div className="field-small" id="load-field">
-                            <span>Ocupação Bau</span>
-                            <div className="content-field">2</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="field" id="address-out-field">
-                            <span>Endereço de Entrega</span>
-                            <div className="content-field">Rua etore caraturadsad 3 - jardim</div>
-                        </div>
-                        <div className="field-small" id="status-field">
-                            <span>Status</span>
-                            <div className="content-field">2</div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div>
-                            <button className="button-orders" onClick={() => { HandleClick(1) }} >Acompanhar Pedido</button>
+                        <div className="row">
+                            <div>
+                                <button className="button-orders" onClick={() => { HandleClick(order._id) }} >Acompanhar Pedido</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            ))}
         </>
     )
 
 }
 
 export const AcompanharPedidos = () => {
+
+    let [order, setOrder] = useState<Order>({
+        _id: 999,
+        desc: '',
+        size: 0,
+        weight: 0,
+        amount: 0,
+        container: 0,
+        addressin: '',
+        addressout: '',
+        status: false
+    });
+
+    const location = useLocation();
+    let id: string = location.pathname.substring(12);
+
+    const api = new GlApi();
+
+    useEffect(() => {
+        async function Get() {
+            try {
+                let order = await api.getOrderByID(id);
+                if (order._id) {
+                    setOrder(order);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        Get();
+    }, [])
 
     return (
         <div className="order-overview-container">
@@ -331,45 +297,45 @@ export const AcompanharPedidos = () => {
                     <div className="row">
                         <div className="field" id="desc-field">
                             <span>Descrição</span>
-                            <div className="content-field">3 KILOS DE BOMBA DE TRIOG</div>
+                            <div className="content-field">{order.desc}</div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="field" id="id-field">
                             <span>ID Pedido</span>
-                            <div className="content-field">2</div>
+                            <div className="content-field">{order._id}</div>
                         </div>
                         <div className="field" id="size-field">
                             <span>Dimensão da Caixa</span>
-                            <div className="content-field">22m</div>
+                            <div className="content-field">{order.size}</div>
                         </div>
                         <div className="field" id="weith-field">
                             <span>Peso Total Unitario</span>
-                            <div className="content-field">44kg</div>
+                            <div className="content-field">{order.weight}</div>
                         </div>
                         <div className="field" id="amount-field">
                             <span>Quantidade Total</span>
-                            <div className="content-field">4</div>
+                            <div className="content-field">{order.amount}</div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="field" id="address-in-field">
                             <span>Endereço de Retirada</span>
-                            <div className="content-field">Rua etore caraturadsad 3 - jardim</div>
+                            <div className="content-field">{order.addressout}</div>
                         </div>
                         <div className="field-small" id="load-field">
                             <span>Ocupação Bau</span>
-                            <div className="content-field">2</div>
+                            <div className="content-field">{order.container}</div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="field" id="address-out-field">
                             <span>Endereço de Entrega</span>
-                            <div className="content-field">Rua etore caraturadsad 3 - jardim</div>
+                            <div className="content-field">{order.addressin}</div>
                         </div>
                         <div className="field-small" id="status-field">
                             <span>Status</span>
-                            <div className="content-field">2</div>
+                            <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
                         </div>
                     </div>
                     <div className="row">
@@ -406,22 +372,24 @@ export const Transportes = () => {
 
     let [garage, setGarage] = useState<Truck[]>([]);
     let [loading, setLoadStatus] = useState(true);
- 
+
     const api = new GlApi();
 
-    async function Get() {
-        try {
-            let trucks = await api.getGarage();
-            if (trucks.length > 0) {
-                setGarage(trucks);
-                setLoadStatus(false);
+    useEffect(() => {
+        async function Get() {
+            try {
+                let trucks = await api.getGarage();
+                if (trucks.length > 0) {
+                    setGarage(trucks);
+                    setLoadStatus(false);
+                }
+                console.log('aaa')
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    Get();
+        };
+        Get();
+    }, [])
 
     return (
         <div className="flex-colunm">
