@@ -2,7 +2,7 @@ import { NavigateFunction, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Select from "react-select";
-import OrdersSelectStyle from "../../assets/select-styles/OrdersSelect";
+import { DriverTruckSelect, OrdersSelectStyle, } from "../../assets/select-styles/SelectStyles";
 
 import "../../css/gl/gldashboard.css";
 import "../../css/gl/glmotoristas.css";
@@ -322,7 +322,7 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
 
 export const AcompanharPedidos = () => {
 
-    let [order, setOrder] = useState<Order>({
+    const [order, setOrder] = useState<Order>({
         _id: 999,
         desc: '',
         size: 0,
@@ -334,24 +334,89 @@ export const AcompanharPedidos = () => {
         status: false
     });
 
+    const [truck, setTruck] = useState<Truck>({
+        _id: 0,
+        model: '',
+        plateNumber: '',
+        axle: '',
+        maxcapacity: 0,
+        status: false
+    });
+
+    const [driver, setDriver] = useState<Driver>({
+        _id: 0,
+        name: '',
+        status: false
+    });
+
     const location = useLocation();
-    let id: string = location.pathname.substring(12);
+    const id: string = location.pathname.substring(12);
 
     const api = new GlApi();
 
+    const [optionsDrivers, setOptionsDrivers] = useState<Option[]>([{ label: '', value: 0 }]);
+    const [optionsTrucks, setOptionsTrucks] = useState<Option[]>([{ label: '', value: 0 }]);
+
     useEffect(() => {
+
         async function Get() {
             try {
-                let order = await api.getOrderByID(id);
+
+                const order = await api.getOrderByID(id);
+                const availibleDrivers = await api.getAvailibleDrivers();
+                const availibleTrucks = await api.getAvailibleTrucks();
+
                 if (order._id) {
                     setOrder(order);
                 }
+
+                let copyDrivers: Option[] = [];
+                let copyTrucks: Option[] = [];
+
+                availibleDrivers.forEach((driver) => {
+                    copyDrivers.push({ label: driver.name, value: driver._id })
+                })
+
+                setOptionsDrivers(copyDrivers);
+
+                availibleTrucks.forEach((truck) => {
+                    copyTrucks.push({ label: truck.model, value: truck._id })
+                })
+
+                setOptionsTrucks(copyTrucks);
+
             } catch (error) {
                 console.log(error);
             }
         };
+
         Get();
+
     }, [])
+
+    const HandleChangeTruck = async (selectedOption: any) => {
+        if (selectedOption) {
+            const availibleTrucks = await api.getAvailibleTrucks();
+
+            let truck = availibleTrucks.find(a => a._id == selectedOption.value);
+
+            if (truck) {
+                setTruck(truck);
+            }
+        }
+    }
+
+    const HandleChangeDriver = async (selectedOption: any) => {
+        if (selectedOption) {
+            const availibleDrivers = await api.getAvailibleDrivers();
+
+            let driver = availibleDrivers.find(a => a._id == selectedOption.value);
+
+            if (driver) {
+                setDriver(driver);
+            }
+        }
+    }
 
     return (
         <div className="order-overview-container">
@@ -359,36 +424,36 @@ export const AcompanharPedidos = () => {
                 <div className="truck-card" id="truck-card-overview">
                     <div className="truck-card-top flex-colunm">
                         <div className="truck-img-container"></div>
-                        <h3 className="truck-name">Merces Beazn 55 300</h3>
+                        <h3 className="truck-name">{truck.model}</h3>
                     </div>
                     <div className="truck-card-bottom flex-colunm">
                         <div className="desc-row">
+                            <h4 className="truck-desc">Placa</h4>
+                            <p className="truck-info">{truck.plateNumber}</p>
+                        </div>
+                        <div className="desc-row">
                             <h4 className="truck-desc">Tipo de Eixo</h4>
-                            <p className="truck-info">Eixos triplos</p>
+                            <p className="truck-info">{truck.axle}</p>
                         </div>
                         <div className="desc-row">
                             <h4 className="truck-desc">Capacidade Maxima</h4>
-                            <p className="truck-info">1 Tonelada</p>
-                        </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Quantidade Disponivel p/ Transporte</h4>
-                            <p className="truck-info">400 kilos</p>
+                            <p className="truck-info">{truck.maxcapacity}</p>
                         </div>
                     </div>
                 </div>
                 <div className="driver-card" id="driver-card-overview">
                     <div className="driver-card-top flex-colunm">
                         <div className="driver-img-container"></div>
-                        <h3 className="driver-name">Joao Pedro Lima Teixeira</h3>
+                        <h3 className="driver-name">{driver.name}</h3>
                     </div>
                     <div className="driver-card-bottom">
                         <div className="desc-row flex-colunm">
                             <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">Disponivel</p>
+                            <p className="driver-info">{driver.status ? 'Disponivel' : ''}</p>
                         </div>
                         <div className="desc-row flex-colunm">
                             <h4 className="driver-desc">Cargo</h4>
-                            <p className="driver-info">Motorista</p>
+                            <p className="driver-info">{driver.status ? 'Motorista' : ''}</p>
                         </div>
                     </div>
                 </div>
@@ -442,21 +507,11 @@ export const AcompanharPedidos = () => {
                     <div className="row">
                         <div className="field" id="select-t-field">
                             <span>Alocar Transporte</span>
-                            <select className="select-order">
-                                <option>001</option>
-                                <option>002</option>
-                                <option>003</option>
-                                <option>1500</option>
-                            </select>
+                            <Select isClearable options={optionsTrucks} placeholder={"Selecione um veículo"} styles={DriverTruckSelect} noOptionsMessage={() => 'Indisponível'} onChange={HandleChangeTruck} />
                         </div>
                         <div className="field" id="select-m-field">
                             <span>Alocar Motorista</span>
-                            <select className="select-order">
-                                <option>001</option>
-                                <option>002</option>
-                                <option>003</option>
-                                <option>1500</option>
-                            </select>
+                            <Select isClearable options={optionsDrivers} placeholder={"Selecione um motorista"} styles={DriverTruckSelect} noOptionsMessage={() => 'Indisponível'} onChange={HandleChangeDriver} />
                         </div>
                         <div className="field" id="button-c-field">
                             <button className="button-overwiew">Confirmar Pedido</button>

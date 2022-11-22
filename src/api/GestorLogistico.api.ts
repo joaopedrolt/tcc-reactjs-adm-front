@@ -30,9 +30,19 @@ class GlApi extends Api {
         const response = await fetch(this.baseApiPath + 'drivers');
         return response.json();
     }
-
+    
     async getGlDashBoard(): Promise<GlDashBoard> {
         const response = await fetch(this.baseApiPath + 'dashboard');
+        return response.json();
+    }
+
+    async getAvailibleDrivers(): Promise<Driver[]> {
+        const response = await fetch(this.baseApiPath + 'drivers/avaliable');
+        return response.json();
+    }
+
+    async getAvailibleTrucks(): Promise<Truck[]> {
+        const response = await fetch(this.baseApiPath + 'garage/avaliable');
         return response.json();
     }
 

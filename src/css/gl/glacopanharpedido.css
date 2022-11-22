@@ -16,12 +16,12 @@
 }
 
 .select-order{
-    margin-top: 5px;
     width: 90%;
     display: grid;
     grid-template-areas: "select";
     align-items: center;
     position: relative;
+    margin-top: 5px;
     height: 49px;
     padding: 14px 10px;
     cursor: pointer;
@@ -32,7 +32,7 @@
 .button-overwiew {
     height: 47px;
     width: 100%;
-    margin-bottom: 2px;
+    margin-top: 25px;
     background-color: #d1844d;
     color: white;
     transition: all 0.3s ease;
