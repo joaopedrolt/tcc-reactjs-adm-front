@@ -49,11 +49,13 @@
 }
 
 #truck-card-overview{
-    width: auto !important;
-    padding: 30px 40px;
+    width: 350px !important;
+    height: 385px !important;
+    padding: 30px 0px;
 }
 
 #driver-card-overview{
-    width: auto !important;
-    padding: 30px 40px;
+    width: 350px !important;
+    height: 385px !important;
+    padding: 30px 0px;
 }

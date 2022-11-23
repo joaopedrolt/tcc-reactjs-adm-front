@@ -25,7 +25,7 @@ type PedidosProps = {
 
 export const DashBoard = () => {
 
-    let [info, setInfo] = useState<GlDashBoard>({
+    const [info, setInfo] = useState<GlDashBoard>({
         yield: '0,00',
         deliveries: 0,
         available: 0,
@@ -90,7 +90,7 @@ export const DashBoard = () => {
 
 export const Motoristas = () => {
 
-    let [drivers, setDrivers] = useState<Driver[]>([]);
+    const [drivers, setDrivers] = useState<Driver[]>([]);
 
     const api = new GlApi();
 
@@ -139,7 +139,7 @@ export const Motoristas = () => {
 
 export const Pedidos = ({ navigate }: PedidosProps) => {
 
-    let [orders, setOrders] = useState<Order[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
     let options: Option[] = [];
     let isTherePending: boolean = false;
     let isThereOngoing: boolean = false;
@@ -192,7 +192,7 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
 
     return (
         <>
-            <Select isClearable options={options} placeholder={"Selecione o Pedido"} styles={OrdersSelectStyle} onChange={HandleChange} />
+            <Select isClearable options={options} placeholder={"Selecione o Pedido"} styles={OrdersSelectStyle} onChange={HandleChange} noOptionsMessage={() => 'Não Encontrado'} />
             <h1 className="orders-title">{isTherePending ? 'Pendentes' : ''}</h1>
             {orders.map((order, index) => {
                 let status = order.status;
@@ -370,6 +370,11 @@ export const AcompanharPedidos = () => {
                     setOrder(order);
                 }
 
+                if (order.truck && order.driver) {
+                    setDriver(order.driver);
+                    setTruck(order.truck);
+                }
+
                 let copyDrivers: Option[] = [];
                 let copyTrucks: Option[] = [];
 
@@ -403,6 +408,16 @@ export const AcompanharPedidos = () => {
             if (truck) {
                 setTruck(truck);
             }
+
+        } else {
+            setTruck({
+                _id: 0,
+                model: '',
+                plateNumber: '',
+                axle: '',
+                maxcapacity: 0,
+                status: false
+            });
         }
     }
 
@@ -415,47 +430,59 @@ export const AcompanharPedidos = () => {
             if (driver) {
                 setDriver(driver);
             }
+
+        } else {
+            setDriver({
+                _id: 0,
+                name: '',
+                status: false
+            });
         }
     }
+
 
     return (
         <div className="order-overview-container">
             <div className="order-overview-top">
                 <div className="truck-card" id="truck-card-overview">
-                    <div className="truck-card-top flex-colunm">
-                        <div className="truck-img-container"></div>
-                        <h3 className="truck-name">{truck.model}</h3>
-                    </div>
-                    <div className="truck-card-bottom flex-colunm">
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Placa</h4>
-                            <p className="truck-info">{truck.plateNumber}</p>
+                    {truck.status && <>
+                        <div className="truck-card-top flex-colunm">
+                            <div className="truck-img-container"></div>
+                            <h3 className="truck-name">{truck.model}</h3>
                         </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Tipo de Eixo</h4>
-                            <p className="truck-info">{truck.axle}</p>
+                        <div className="truck-card-bottom flex-colunm">
+                            <div className="desc-row">
+                                <h4 className="truck-desc">Placa</h4>
+                                <p className="truck-info">{truck.plateNumber}</p>
+                            </div>
+                            <div className="desc-row">
+                                <h4 className="truck-desc">Tipo de Eixo</h4>
+                                <p className="truck-info">{truck.axle}</p>
+                            </div>
+                            <div className="desc-row">
+                                <h4 className="truck-desc">Capacidade Maxima</h4>
+                                <p className="truck-info">{truck.maxcapacity}</p>
+                            </div>
                         </div>
-                        <div className="desc-row">
-                            <h4 className="truck-desc">Capacidade Maxima</h4>
-                            <p className="truck-info">{truck.maxcapacity}</p>
-                        </div>
-                    </div>
+                    </>}
                 </div>
                 <div className="driver-card" id="driver-card-overview">
-                    <div className="driver-card-top flex-colunm">
-                        <div className="driver-img-container"></div>
-                        <h3 className="driver-name">{driver.name}</h3>
-                    </div>
-                    <div className="driver-card-bottom">
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Status</h4>
-                            <p className="driver-info">{driver.status ? 'Disponivel' : ''}</p>
+                    {driver.status && <>
+                        <div className="driver-card-top flex-colunm">
+                            <div className="driver-img-container"></div>
+                            <h3 className="driver-name">{driver.name}</h3>
                         </div>
-                        <div className="desc-row flex-colunm">
-                            <h4 className="driver-desc">Cargo</h4>
-                            <p className="driver-info">{driver.status ? 'Motorista' : ''}</p>
+                        <div className="driver-card-bottom">
+                            <div className="desc-row flex-colunm">
+                                <h4 className="driver-desc">Status</h4>
+                                <p className="driver-info">{driver.status ? 'Em entrega' : 'Disponivel'}</p>
+                            </div>
+                            <div className="desc-row flex-colunm">
+                                <h4 className="driver-desc">Cargo</h4>
+                                <p className="driver-info">{driver.status ? 'Motorista' : 'Motorista'}</p>
+                            </div>
                         </div>
-                    </div>
+                    </>}
                 </div>
             </div>
             <div className="order-overview-bottom">
@@ -504,19 +531,21 @@ export const AcompanharPedidos = () => {
                             <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="field" id="select-t-field">
-                            <span>Alocar Transporte</span>
-                            <Select isClearable options={optionsTrucks} placeholder={"Selecione um veículo"} styles={DriverTruckSelect} noOptionsMessage={() => 'Indisponível'} onChange={HandleChangeTruck} />
+                    {!order.truck && !order.driver &&
+                        <div className="row">
+                            <div className="field" id="select-t-field">
+                                <span>Alocar Transporte</span>
+                                <Select isClearable options={optionsTrucks} placeholder={"Selecione um veículo"} styles={DriverTruckSelect} noOptionsMessage={() => 'Indisponível'} onChange={HandleChangeTruck} />
+                            </div>
+                            <div className="field" id="select-m-field">
+                                <span>Alocar Motorista</span>
+                                <Select isClearable options={optionsDrivers} placeholder={"Selecione um motorista"} styles={DriverTruckSelect} noOptionsMessage={() => 'Indisponível'} onChange={HandleChangeDriver} />
+                            </div>
+                            <div className="field" id="button-c-field">
+                                <button className="button-overwiew">Confirmar Pedido</button>
+                            </div>
                         </div>
-                        <div className="field" id="select-m-field">
-                            <span>Alocar Motorista</span>
-                            <Select isClearable options={optionsDrivers} placeholder={"Selecione um motorista"} styles={DriverTruckSelect} noOptionsMessage={() => 'Indisponível'} onChange={HandleChangeDriver} />
-                        </div>
-                        <div className="field" id="button-c-field">
-                            <button className="button-overwiew">Confirmar Pedido</button>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -526,8 +555,9 @@ export const AcompanharPedidos = () => {
 
 export const Transportes = () => {
 
-    let [garage, setGarage] = useState<Truck[]>([]);
-    let [loading, setLoadStatus] = useState(true);
+    const [garage, setGarage] = useState<Truck[]>([]);
+    const [loading, setLoadStatus] = useState(true);
+    const [switchMode, setMode] = useState<boolean>(false);
 
     const api = new GlApi();
 
@@ -546,6 +576,10 @@ export const Transportes = () => {
         };
         Get();
     }, [])
+
+    const ToggleMode = () => {
+        switchMode ? setMode(false) : setMode(true);
+    }
 
     return (
         <div className="flex-colunm">
@@ -575,7 +609,7 @@ export const Transportes = () => {
                                     </div>
                                     <div className="desc-row">
                                         <h4 className="truck-desc">Status</h4>
-                                        <p className="truck-info">{truck.status ? "Disponivel" : "Indisponivel"}</p>
+                                        <p className="truck-info">{truck.status ? "Indisponivel" : "Disponivel"}</p>
                                     </div>
                                 </div>
                             </div>
@@ -583,7 +617,7 @@ export const Transportes = () => {
                 }
 
             </div>
-            <button className="button-manage">Gerenciar Veículos</button>
+            <button onClick={ToggleMode} className="button-manage">Gerenciar Veículos</button>
         </div>
     )
 
