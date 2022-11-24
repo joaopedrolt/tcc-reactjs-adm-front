@@ -1,4 +1,4 @@
-.garage-title{
+.garage-title {
     text-align: center;
     padding: 0 20px;
     color: #2b2b2b;
@@ -39,7 +39,7 @@
     text-align: center;
 }
 
-.desc-row{
+.desc-row {
     justify-content: center;
 }
 
@@ -56,7 +56,7 @@
     text-align: center;
 }
 
-.button-manage{
+.button-manage {
     margin: auto;
     align-content: center;
     padding: 14px 130px;
@@ -67,6 +67,61 @@
     cursor: pointer;
 }
 
-.button-manage:hover {
+.button-manage-add {
+    margin: auto;
+    align-content: center;
+    padding: 14px 130px;
+    margin-top: 20px;
+    background-color: #59d250;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.button-manage:hover,
+.button-manage-add:hover {
     transform: scale(102%);
+}
+
+.container-form-add {
+    width: 80%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.container-form-add form .row {
+    gap: 15px;
+}
+
+.container-form-add form .row .col .title {
+    font-size: 20px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.container-form-add form .row .col .inputbox {
+    margin: 15px 0;
+}
+
+.container-form-add form .row .col .inputbox span {
+    margin-bottom: 10px;
+    display: block;
+}
+
+.container-form-add form .row .col .inputbox input {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.container-form-add form .row .col .inputbox input:focus {
+    border: 1px solid black;
+}
+
+.container-form-add form .row .col .flex .inputbox {
+    margin-top: 5px;
+}
+
+.label-form-add-item{
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
 }

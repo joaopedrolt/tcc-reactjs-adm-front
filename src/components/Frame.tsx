@@ -20,7 +20,7 @@ const Frame = ({ page, currentTab, navigate }: Props) => {
             <div className="frame">
                 <div className="menu-area">
                     <div className="menu-perfil">
-                        <div className="avatar joao"></div>
+                        <div className="avatar logistico"></div>
                         <h3>Gestor Logístico</h3>
                         <p>João Pedro Lima Teixeira</p>
                     </div>

@@ -1,7 +1,7 @@
-import { NavigateFunction, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { NavigateFunction, useLocation } from "react-router-dom";
 import Select from "react-select";
+
 import { DriverTruckSelect, OrdersSelectStyle, } from "../../assets/select-styles/SelectStyles";
 
 import "../../css/gl/gldashboard.css";
@@ -10,16 +10,20 @@ import "../../css/gl/glpedidos.css";
 import "../../css/gl/gltransportes.css";
 import "../../css/gl/glacopanharpedido.css";
 
+import X from "../../assets/svg/x.svg";
+
 import GlApi from "../../api/GestorLogistico.api";
+import TimeZone from "../../api/TimeZone.api";
+import { DistanceMatrixService, useJsApiLoader } from "@react-google-maps/api";
 
 import { Truck } from "../../types/Truck";
 import { Order } from "../../types/Order";
 import { Driver } from "../../types/Driver";
 import { GlDashBoard } from "../../types/GlDashBoard";
 import { Option } from "../../types/Option";
-import TimeZone from "../../api/TimeZone.api";
 
-type PedidosProps = {
+
+type Navigate = {
     navigate: NavigateFunction;
 }
 
@@ -137,7 +141,7 @@ export const Motoristas = () => {
 
 }
 
-export const Pedidos = ({ navigate }: PedidosProps) => {
+export const Pedidos = ({ navigate }: Navigate) => {
 
     const [orders, setOrders] = useState<Order[]>([]);
     let options: Option[] = [];
@@ -223,15 +227,19 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
                                         <span>Quantidade Total</span>
                                         <div className="content-field">{order.amount}</div>
                                     </div>
+                                    <div className="field" id="load-field">
+                                        <span>Ocupação Bau</span>
+                                        <div className="content-field">{order.container}</div>
+                                    </div>
                                 </div>
                                 <div className="row">
                                     <div className="field" id="address-in-field">
                                         <span>Endereço de Retirada</span>
                                         <div className="content-field">{order.addressout}</div>
                                     </div>
-                                    <div className="field-small" id="load-field">
-                                        <span>Ocupação Bau</span>
-                                        <div className="content-field">{order.container}</div>
+                                    <div className="field-small" id="cep-in">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepin}</div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -239,9 +247,15 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
                                         <span>Endereço de Entrega</span>
                                         <div className="content-field">{order.addressin}</div>
                                     </div>
-                                    <div className="field-small" id="status-field">
+                                    <div className="field-small" id="cep-out">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepout}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="status-field">
                                         <span>Status</span>
-                                        <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
+                                        <div className="content-field">{order.statusdesc}</div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -284,15 +298,19 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
                                         <span>Quantidade Total</span>
                                         <div className="content-field">{order.amount}</div>
                                     </div>
+                                    <div className="field" id="load-field">
+                                        <span>Ocupação Bau</span>
+                                        <div className="content-field">{order.container}</div>
+                                    </div>
                                 </div>
                                 <div className="row">
                                     <div className="field" id="address-in-field">
                                         <span>Endereço de Retirada</span>
                                         <div className="content-field">{order.addressout}</div>
                                     </div>
-                                    <div className="field-small" id="load-field">
-                                        <span>Ocupação Bau</span>
-                                        <div className="content-field">{order.container}</div>
+                                    <div className="field-small" id="cep-in">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepin}</div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -300,9 +318,15 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
                                         <span>Endereço de Entrega</span>
                                         <div className="content-field">{order.addressin}</div>
                                     </div>
-                                    <div className="field-small" id="status-field">
+                                    <div className="field-small" id="cep-out">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepout}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="status-field">
                                         <span>Status</span>
-                                        <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
+                                        <div className="content-field">{order.statusdesc}</div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -322,6 +346,14 @@ export const Pedidos = ({ navigate }: PedidosProps) => {
 
 export const AcompanharPedidos = () => {
 
+    let { isLoaded } = useJsApiLoader(
+        { googleMapsApiKey: 'AIzaSyAvDJR7162n3hAOb0TuQafdssfXy7VwtnA' }
+    )
+
+    if (isLoaded) {
+        console.log("aaa")
+    }
+
     const [order, setOrder] = useState<Order>({
         _id: 999,
         desc: '',
@@ -330,8 +362,11 @@ export const AcompanharPedidos = () => {
         amount: 0,
         container: 0,
         addressin: '',
+        cepin: '',
         addressout: '',
-        status: false
+        cepout: '',
+        status: false,
+        statusdesc: ''
     });
 
     const [truck, setTruck] = useState<Truck>({
@@ -440,7 +475,6 @@ export const AcompanharPedidos = () => {
         }
     }
 
-
     return (
         <div className="order-overview-container">
             <div className="order-overview-top">
@@ -510,15 +544,19 @@ export const AcompanharPedidos = () => {
                             <span>Quantidade Total</span>
                             <div className="content-field">{order.amount}</div>
                         </div>
+                        <div className="field" id="load-field">
+                            <span>Ocupação Bau</span>
+                            <div className="content-field">{order.container}</div>
+                        </div>
                     </div>
                     <div className="row">
                         <div className="field" id="address-in-field">
                             <span>Endereço de Retirada</span>
                             <div className="content-field">{order.addressout}</div>
                         </div>
-                        <div className="field-small" id="load-field">
-                            <span>Ocupação Bau</span>
-                            <div className="content-field">{order.container}</div>
+                        <div className="field-small" id="cep-in">
+                            <span>Cep</span>
+                            <div className="content-field">{order.cepin}</div>
                         </div>
                     </div>
                     <div className="row">
@@ -526,9 +564,15 @@ export const AcompanharPedidos = () => {
                             <span>Endereço de Entrega</span>
                             <div className="content-field">{order.addressin}</div>
                         </div>
-                        <div className="field-small" id="status-field">
+                        <div className="field-small" id="cep-out">
+                            <span>Cep</span>
+                            <div className="content-field">{order.cepout}</div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="field" id="status-field">
                             <span>Status</span>
-                            <div className="content-field">{order.status ? "Em andamento" : "Aguardando Direcionamento"}</div>
+                            <div className="content-field">{order.statusdesc}</div>
                         </div>
                     </div>
                     {!order.truck && !order.driver &&
@@ -553,7 +597,7 @@ export const AcompanharPedidos = () => {
 
 }
 
-export const Transportes = () => {
+export const Transportes = ({ navigate }: Navigate) => {
 
     const [garage, setGarage] = useState<Truck[]>([]);
     const [loading, setLoadStatus] = useState(true);
@@ -579,6 +623,11 @@ export const Transportes = () => {
 
     const ToggleMode = () => {
         switchMode ? setMode(false) : setMode(true);
+    }
+
+    const HandleClickAdd = () => {
+        let path = "/gl/garagem/add";
+        navigate(path);
     }
 
     return (
@@ -611,14 +660,48 @@ export const Transportes = () => {
                                         <h4 className="truck-desc">Status</h4>
                                         <p className="truck-info">{truck.status ? "Indisponivel" : "Disponivel"}</p>
                                     </div>
+                                    {switchMode && !truck.status && <X />}
                                 </div>
                             </div>
                         ))} </>
                 }
 
             </div>
-            <button onClick={ToggleMode} className="button-manage">Gerenciar Veículos</button>
+            <button onClick={ToggleMode} className="button-manage">{!switchMode ? "Gerenciar Veículos" : '\u2190 Retornar'}</button>
+            {switchMode && <button onClick={HandleClickAdd} className="button-manage-add">Adicionar Veículo</button>}
         </div>
+    )
+
+}
+
+export const AdicionarTransporte = () => {
+    return (
+        <>
+            <h1 className="garage-title">Adicionar Veículo</h1>
+            <div className="container-form-add">
+                <form action="">
+                    <div className="col">
+                        <div className="inputbox">
+                            <span>Veiculo</span>
+                            <input className="label-form-add-item" type="text" />
+                        </div>
+                        <div className="inputbox">
+                            <span>Tipo Eixo</span>
+                            <input className="label-form-add-item" type="text" />
+                        </div>
+                        <div className="inputbox">
+                            <span>Peso Maximo</span>
+                            <input className="label-form-add-item" type="text" />
+                        </div>
+                        <div className="inputbox">
+                            <span>Tamanho Maximo para Transporte</span>
+                            <input className="label-form-add-item" type="text" />
+                        </div>
+                    </div>
+                    <button type="submit" className="button-manage-add">Adicionar Veículo</button>
+                </form>
+            </div>
+        </>
     )
 
 }

@@ -4,7 +4,6 @@ import Login from "../components/login/Login";
 import Frame from "../components/Frame";
 import * as GestorLogistico from "../components/gl/GestorLogistico";
 
-
 const MainRoutes = () => {
 
   const navigate = useNavigate();
@@ -30,7 +29,12 @@ const MainRoutes = () => {
         } />
         <Route path="/gl/garagem" element={
           <RequireAuth>
-            <Frame navigate={navigate} currentTab="Garagem" page={<GestorLogistico.Transportes />} />
+            <Frame navigate={navigate} currentTab="Garagem" page={<GestorLogistico.Transportes navigate={navigate} />} />
+          </RequireAuth>
+        } />
+        <Route path="/gl/garagem/add" element={
+          <RequireAuth>
+            <Frame navigate={navigate} currentTab="Garagem" page={<GestorLogistico.AdicionarTransporte />} />
           </RequireAuth>
         } />
         <Route path="/gl/motoristas" element={
