@@ -346,13 +346,13 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
 export const AcompanharPedidos = () => {
 
-    let { isLoaded } = useJsApiLoader(
-        { googleMapsApiKey: 'AIzaSyAvDJR7162n3hAOb0TuQafdssfXy7VwtnA' }
+    /* let { isLoaded } = useJsApiLoader(
+        { googleMapsApiKey: '' }
     )
 
     if (isLoaded) {
         console.log("aaa")
-    }
+    } */
 
     const [order, setOrder] = useState<Order>({
         _id: 999,
