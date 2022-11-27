@@ -14,9 +14,9 @@ import X from "../../assets/svg/x.svg";
 
 import GlApi from "../../api/GestorLogistico.api";
 import TimeZone from "../../api/TimeZone.api";
-import { DistanceMatrixService, useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader } from "@react-google-maps/api";
 
-import { Truck } from "../../types/Truck";
+import { Truck, TruckAdd } from "../../types/Truck";
 import { Order } from "../../types/Order";
 import { Driver } from "../../types/Driver";
 import { GlDashBoard } from "../../types/GlDashBoard";
@@ -366,7 +366,8 @@ export const AcompanharPedidos = () => {
         addressout: '',
         cepout: '',
         status: false,
-        statusdesc: ''
+        statusdesc: '',
+        price: 0.0
     });
 
     const [truck, setTruck] = useState<Truck>({
@@ -479,7 +480,7 @@ export const AcompanharPedidos = () => {
         <div className="order-overview-container">
             <div className="order-overview-top">
                 <div className="truck-card" id="truck-card-overview">
-                    {truck.status && <>
+                    {truck.model && <>
                         <div className="truck-card-top flex-colunm">
                             <div className="truck-img-container"></div>
                             <h3 className="truck-name">{truck.model}</h3>
@@ -501,7 +502,7 @@ export const AcompanharPedidos = () => {
                     </>}
                 </div>
                 <div className="driver-card" id="driver-card-overview">
-                    {driver.status && <>
+                    {driver.name && <>
                         <div className="driver-card-top flex-colunm">
                             <div className="driver-img-container"></div>
                             <h3 className="driver-name">{driver.name}</h3>
@@ -605,19 +606,19 @@ export const Transportes = ({ navigate }: Navigate) => {
 
     const api = new GlApi();
 
-    useEffect(() => {
-        async function Get() {
-            try {
-                let trucks = await api.getGarage();
-                if (trucks.length > 0) {
-                    setGarage(trucks);
-                    setLoadStatus(false);
-                }
-                console.log('aaa')
-            } catch (error) {
-                console.log(error);
+    async function Get() {
+        try {
+            let trucks = await api.getGarage();
+            if (trucks.length > 0) {
+                setGarage(trucks);
+                setLoadStatus(false);
             }
-        };
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
         Get();
     }, [])
 
@@ -626,8 +627,13 @@ export const Transportes = ({ navigate }: Navigate) => {
     }
 
     const HandleClickAdd = () => {
-        let path = "/gl/garagem/add";
+        const path = "/gl/garagem/add";
         navigate(path);
+    }
+
+    const HandleClickDelete = async (_id: number) => {
+        await api.postDeleteTruck(_id);
+        Get();
     }
 
     return (
@@ -660,7 +666,7 @@ export const Transportes = ({ navigate }: Navigate) => {
                                         <h4 className="truck-desc">Status</h4>
                                         <p className="truck-info">{truck.status ? "Indisponivel" : "Disponivel"}</p>
                                     </div>
-                                    {switchMode && !truck.status && <X />}
+                                    {switchMode && !truck.status && <div onClick={() => { HandleClickDelete(truck._id) }}><X /></div>}
                                 </div>
                             </div>
                         ))} </>
@@ -674,32 +680,83 @@ export const Transportes = ({ navigate }: Navigate) => {
 
 }
 
-export const AdicionarTransporte = () => {
+export const AdicionarTransporte = ({ navigate }: Navigate) => {
+
+    const [model, setModel] = useState("");
+    const [plate, setPlate] = useState("");
+    const [axle, setAxle] = useState("");
+    const [maxcapacity, setMaxCapacity] = useState("");
+
+    const changeInput = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
+        switch (id) {
+            case 'model':
+                setModel(event.target.value);
+                break;
+            case 'plate':
+                setPlate(event.target.value);
+                break;
+            case 'axle':
+                setAxle(event.target.value);
+                break;
+            case 'maxcapacity':
+                setMaxCapacity(event.target.value);
+                break;
+        }
+    }
+
+    const api = new GlApi();
+
+    const HandleCLick = () => {
+
+        if (
+            (model == '' || model == undefined ) ||
+            (plate == '' || plate == undefined) ||
+            (axle == '' || axle == undefined) ||
+            (maxcapacity == '' || maxcapacity == undefined)
+        ) { alert('Insira os Dados Corretamente!') } else {
+
+            const addTruckModel: TruckAdd = {
+                model: model,
+                plateNumber: plate,
+                axle: axle,
+                maxcapacity: parseFloat(maxcapacity)
+            }
+
+            console.log(addTruckModel);
+
+            api.postNewTruck(addTruckModel);
+            const path = "/gl/garagem/";
+            navigate(path);
+
+        }
+
+    }
+
     return (
         <>
             <h1 className="garage-title">Adicionar Veículo</h1>
             <div className="container-form-add">
-                <form action="">
+                <div className="flex-colunm">
                     <div className="col">
                         <div className="inputbox">
-                            <span>Veiculo</span>
-                            <input className="label-form-add-item" type="text" />
+                            <span>Modelo</span>
+                            <input value={model} onChange={(e) => { changeInput(e, 'model') }} className="label-form-add-item" type="text" />
                         </div>
                         <div className="inputbox">
-                            <span>Tipo Eixo</span>
-                            <input className="label-form-add-item" type="text" />
+                            <span>Placa</span>
+                            <input value={plate} onChange={(e) => { changeInput(e, 'plate') }} className="label-form-add-item" type="text" />
                         </div>
                         <div className="inputbox">
-                            <span>Peso Maximo</span>
-                            <input className="label-form-add-item" type="text" />
+                            <span>Tipo de Eixo</span>
+                            <input value={axle} onChange={(e) => { changeInput(e, 'axle') }} className="label-form-add-item" type="text" />
                         </div>
                         <div className="inputbox">
-                            <span>Tamanho Maximo para Transporte</span>
-                            <input className="label-form-add-item" type="text" />
+                            <span>Capacidade Maxima (KG)</span>
+                            <input value={maxcapacity} onChange={(e) => { changeInput(e, 'maxcapacity') }} className="label-form-add-item" type="number" />
                         </div>
                     </div>
-                    <button type="submit" className="button-manage-add">Adicionar Veículo</button>
-                </form>
+                    <button onClick={HandleCLick} className="button-manage-add">Adicionar Veículo</button>
+                </div>
             </div>
         </>
     )

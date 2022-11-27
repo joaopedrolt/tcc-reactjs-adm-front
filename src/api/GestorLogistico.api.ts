@@ -1,7 +1,7 @@
 import { Driver } from "../types/Driver";
 import { GlDashBoard } from "../types/GlDashBoard";
 import { Order } from "../types/Order";
-import { Truck } from "../types/Truck";
+import { Truck, TruckAdd } from "../types/Truck";
 import Api from "./ApiClass.api";
 
 class GlApi extends Api {
@@ -30,7 +30,7 @@ class GlApi extends Api {
         const response = await fetch(this.baseApiPath + 'drivers');
         return response.json();
     }
-    
+
     async getGlDashBoard(): Promise<GlDashBoard> {
         const response = await fetch(this.baseApiPath + 'dashboard');
         return response.json();
@@ -44,6 +44,24 @@ class GlApi extends Api {
     async getAvailibleTrucks(): Promise<Truck[]> {
         const response = await fetch(this.baseApiPath + 'garage/avaliable');
         return response.json();
+    }
+
+    async postNewTruck(data: TruckAdd) {
+        let response = await fetch(this.baseApiPath + 'garage/add', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        return await response.json();
+    }
+
+    async postDeleteTruck(_id: number) {
+        let response = await fetch(this.baseApiPath + 'garage/delete', {
+            method: 'POST',
+            body: JSON.stringify({ _id }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        return await response.json();
     }
 
 }

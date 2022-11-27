@@ -34,7 +34,7 @@ const MainRoutes = () => {
         } />
         <Route path="/gl/garagem/add" element={
           <RequireAuth>
-            <Frame navigate={navigate} currentTab="Garagem" page={<GestorLogistico.AdicionarTransporte />} />
+            <Frame navigate={navigate} currentTab="Garagem" page={<GestorLogistico.AdicionarTransporte navigate={navigate} />} />
           </RequireAuth>
         } />
         <Route path="/gl/motoristas" element={

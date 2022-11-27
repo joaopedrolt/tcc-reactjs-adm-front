@@ -16,4 +16,5 @@ export type Order = {
     statusdesc: string;
     driver?: Driver;
     truck?: Truck;
+    price: number;
 }

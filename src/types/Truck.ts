@@ -6,3 +6,10 @@ export type Truck = {
     maxcapacity: number;
     status: boolean;
 }
+
+export type TruckAdd = { 
+    model: string; 
+    plateNumber: string;
+    axle: string; 
+    maxcapacity: number;
+}
