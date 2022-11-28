@@ -14,14 +14,12 @@ import X from "../../assets/svg/x.svg";
 
 import GlApi from "../../api/GestorLogistico.api";
 import TimeZone from "../../api/TimeZone.api";
-import { useJsApiLoader } from "@react-google-maps/api";
 
 import { Truck, TruckAdd } from "../../types/Truck";
 import { Order } from "../../types/Order";
 import { Driver } from "../../types/Driver";
 import { GlDashBoard } from "../../types/GlDashBoard";
 import { Option } from "../../types/Option";
-
 
 type Navigate = {
     navigate: NavigateFunction;
@@ -126,7 +124,7 @@ export const Motoristas = () => {
                         <div className="driver-card-bottom">
                             <div className="desc-row flex-colunm">
                                 <h4 className="driver-desc">Status</h4>
-                                <p className="driver-info">{driver.status ? 'Disponivel' : 'Em entrega'}</p>
+                                <p className="driver-info">{driver.status ? 'Em entrega' : 'Disponivel'}</p>
                             </div>
                             <div className="desc-row flex-colunm">
                                 <h4 className="driver-desc">{driver.orderid ? 'Pedido ID' : ''}</h4>
@@ -215,21 +213,17 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                         <span>ID Pedido</span>
                                         <div className="content-field">{order._id}</div>
                                     </div>
-                                    <div className="field" id="size-field">
-                                        <span>Dimensão da Caixa</span>
-                                        <div className="content-field">{order.size}</div>
-                                    </div>
                                     <div className="field" id="weith-field">
-                                        <span>Peso Total Unitario</span>
-                                        <div className="content-field">{order.weight}</div>
+                                        <span>Peso</span>
+                                        <div className="content-field">{order.weight} kg</div>
                                     </div>
                                     <div className="field" id="amount-field">
-                                        <span>Quantidade Total</span>
-                                        <div className="content-field">{order.amount}</div>
+                                        <span>Distancia</span>
+                                        <div className="content-field">{order.distance ? order.distance : 'A definir'}</div>
                                     </div>
                                     <div className="field" id="load-field">
-                                        <span>Ocupação Bau</span>
-                                        <div className="content-field">{order.container}</div>
+                                        <span>Preço</span>
+                                        <div className="content-field">{order.price ? order.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) : 'A definir'}</div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -286,21 +280,17 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                         <span>ID Pedido</span>
                                         <div className="content-field">{order._id}</div>
                                     </div>
-                                    <div className="field" id="size-field">
-                                        <span>Dimensão da Caixa</span>
-                                        <div className="content-field">{order.size}</div>
-                                    </div>
                                     <div className="field" id="weith-field">
-                                        <span>Peso Total Unitario</span>
-                                        <div className="content-field">{order.weight}</div>
+                                        <span>Peso</span>
+                                        <div className="content-field">{order.weight} kg</div>
                                     </div>
                                     <div className="field" id="amount-field">
-                                        <span>Quantidade Total</span>
-                                        <div className="content-field">{order.amount}</div>
+                                        <span>Distancia</span>
+                                        <div className="content-field">{order.distance ? order.distance : 'A definir'}</div>
                                     </div>
                                     <div className="field" id="load-field">
-                                        <span>Ocupação Bau</span>
-                                        <div className="content-field">{order.container}</div>
+                                        <span>Preço</span>
+                                        <div className="content-field">{order.price ? order.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) : 'A definir'}</div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -330,6 +320,16 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                     </div>
                                 </div>
                                 <div className="row">
+                                    <div className="field" id="id-field">
+                                        <span>Motorista</span>
+                                        <div className="content-field">{order.driver?.name}</div>
+                                    </div>
+                                    <div className="field" id="weith-field">
+                                        <span>Transporte</span>
+                                        <div className="content-field">{order.truck?.model}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
                                     <div>
                                         <button className="button-orders" onClick={() => { HandleClick(order._id) }} >Acompanhar Pedido</button>
                                     </div>
@@ -346,21 +346,10 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
 export const AcompanharPedidos = () => {
 
-    /* let { isLoaded } = useJsApiLoader(
-        { googleMapsApiKey: '' }
-    )
-
-    if (isLoaded) {
-        console.log("aaa")
-    } */
-
     const [order, setOrder] = useState<Order>({
         _id: 999,
         desc: '',
-        size: 0,
         weight: 0,
-        amount: 0,
-        container: 0,
         addressin: '',
         cepin: '',
         addressout: '',
@@ -476,6 +465,19 @@ export const AcompanharPedidos = () => {
         }
     }
 
+    const HandleButton = async (_id: number) => {
+
+        if (truck.model != '' && driver.name != '') {
+            const copyDriver: Driver = { ...driver, orderid: _id, status: true};
+            const copyTruck: Truck = { ...truck, orderid: _id , status: true};
+
+            await api.updateOrder(_id, copyDriver, copyTruck);
+        } else {
+            alert('Aloque os recursos corretamente!');
+        }
+
+    }
+
     return (
         <div className="order-overview-container">
             <div className="order-overview-top">
@@ -533,21 +535,17 @@ export const AcompanharPedidos = () => {
                             <span>ID Pedido</span>
                             <div className="content-field">{order._id}</div>
                         </div>
-                        <div className="field" id="size-field">
-                            <span>Dimensão da Caixa</span>
-                            <div className="content-field">{order.size}</div>
-                        </div>
                         <div className="field" id="weith-field">
-                            <span>Peso Total Unitario</span>
-                            <div className="content-field">{order.weight}</div>
+                            <span>Peso</span>
+                            <div className="content-field">{order.weight} kg</div>
                         </div>
                         <div className="field" id="amount-field">
-                            <span>Quantidade Total</span>
-                            <div className="content-field">{order.amount}</div>
+                            <span>Distancia</span>
+                            <div className="content-field">{order.distance ? order.distance : 'A definir'}</div>
                         </div>
                         <div className="field" id="load-field">
-                            <span>Ocupação Bau</span>
-                            <div className="content-field">{order.container}</div>
+                            <span>Preço</span>
+                            <div className="content-field">{order.price ? order.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) : 'A definir'}</div>
                         </div>
                     </div>
                     <div className="row">
@@ -576,6 +574,18 @@ export const AcompanharPedidos = () => {
                             <div className="content-field">{order.statusdesc}</div>
                         </div>
                     </div>
+                    {order.truck && order.driver &&
+                        <div className="row">
+                            <div className="field" id="id-field">
+                                <span>Motorista</span>
+                                <div className="content-field">{order.driver?.name}</div>
+                            </div>
+                            <div className="field" id="weith-field">
+                                <span>Transporte</span>
+                                <div className="content-field">{order.truck?.model}</div>
+                            </div>
+                        </div>
+                    }
                     {!order.truck && !order.driver &&
                         <div className="row">
                             <div className="field" id="select-t-field">
@@ -587,7 +597,7 @@ export const AcompanharPedidos = () => {
                                 <Select isClearable options={optionsDrivers} placeholder={"Selecione um motorista"} styles={DriverTruckSelect} noOptionsMessage={() => 'Indisponível'} onChange={HandleChangeDriver} />
                             </div>
                             <div className="field" id="button-c-field">
-                                <button className="button-overwiew">Confirmar Pedido</button>
+                                <button onClick={() => { HandleButton(order._id) }} className="button-overwiew">Confirmar Pedido</button>
                             </div>
                         </div>
                     }
@@ -659,8 +669,8 @@ export const Transportes = ({ navigate }: Navigate) => {
                                         <p className="truck-info">{truck.axle}</p>
                                     </div>
                                     <div className="desc-row">
-                                        <h4 className="truck-desc">Capacidade Maxima</h4>
-                                        <p className="truck-info">{truck.maxcapacity}</p>
+                                        <h4 className="truck-desc">Capacidade Máxima</h4>
+                                        <p className="truck-info">{truck.maxcapacity} kg</p>
                                     </div>
                                     <div className="desc-row">
                                         <h4 className="truck-desc">Status</h4>
@@ -709,7 +719,7 @@ export const AdicionarTransporte = ({ navigate }: Navigate) => {
     const HandleCLick = () => {
 
         if (
-            (model == '' || model == undefined ) ||
+            (model == '' || model == undefined) ||
             (plate == '' || plate == undefined) ||
             (axle == '' || axle == undefined) ||
             (maxcapacity == '' || maxcapacity == undefined)

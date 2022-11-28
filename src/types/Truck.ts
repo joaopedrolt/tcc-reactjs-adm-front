@@ -5,6 +5,7 @@ export type Truck = {
     axle: string;
     maxcapacity: number;
     status: boolean;
+    orderid?: number;
 }
 
 export type TruckAdd = { 

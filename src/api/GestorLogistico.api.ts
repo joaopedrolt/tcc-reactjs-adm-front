@@ -64,6 +64,14 @@ class GlApi extends Api {
         return await response.json();
     }
 
+    async updateOrder(_id: number, driver: Driver, truck: Truck) {
+        await fetch(this.baseApiPath + 'orders/update/' + _id, {
+            method: 'PATCH',
+            body: JSON.stringify({ driver, truck }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
 }
 
 export default GlApi;
