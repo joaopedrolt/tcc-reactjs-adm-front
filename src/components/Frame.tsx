@@ -33,12 +33,12 @@ const Frame = ({ page, currentTab, navigate }: Props) => {
                     <div className="bottom-segment">
                         <nav>
                             <ul className="menu-nav">
-                                <GlItens navigate={navigate} />
+                                <GlItens navigate={navigate} currentTab={currentTab} />
                             </ul>
                         </nav>
                         <form className="form-ghost config" method="post">
                             <input type="text" className="input-ghost" name="sair" value="sair" />
-                            <div className="button-sair">
+                            <div className="button-sair" onClick={() => { navigate("/") }}>
                                 <div className="item-icon">
                                     <svg fill="#8f8f8f" viewBox="0 0 30 30" width="20px" height="20px">
                                         <path

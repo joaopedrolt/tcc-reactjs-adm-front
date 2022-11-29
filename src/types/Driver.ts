@@ -1,6 +1,6 @@
 export type Driver = {
-    _id: number;
+    _id: string;
     name: string;
     status: boolean;
-    orderid?: number;
+    orderid?: string;
 }

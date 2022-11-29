@@ -47,6 +47,29 @@
     cursor: pointer;
 }
 
+.button-reject,
+.button-accept {
+    padding: 14px 90px;
+    margin-top: 12px;
+    background-color: #d1844d;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.button-accept {
+    background-color: #59d250;
+}
+
+.button-reject {
+    background-color: #d1844d;
+}
+
+.buttons-container{
+    display: flex;
+    gap: 20px;
+}
+
 .button-orders:hover {
     transform: scale(102%);
 }

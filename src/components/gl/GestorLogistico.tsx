@@ -28,7 +28,7 @@ type Navigate = {
 export const DashBoard = () => {
 
     const [info, setInfo] = useState<GlDashBoard>({
-        yield: '0,00',
+        yield: 'R$ 0,00',
         deliveries: 0,
         available: 0,
         date: "DIA/MES/ANO"
@@ -40,10 +40,16 @@ export const DashBoard = () => {
     useEffect(() => {
         async function Get() {
             try {
-                let info = await api.getGlDashBoard();
-                let dateSp = await timezone.getSPDate()
-                if (info.yield) {
-                    let infoCopy = { ...info, date: dateSp };
+                const info = await api.getGlDashBoard();
+                const dateSp = await timezone.getSPDate()
+
+                console.log(info);
+
+                const available = (await api.getAvailibleTrucks()).length;
+
+                if (info[0].yield) {
+                    const yieldString = info[0].yield.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+                    const infoCopy: GlDashBoard = { ...info[0], yield: yieldString, date: dateSp, available: available };
                     setInfo(infoCopy);
                 }
             } catch (error) {
@@ -58,30 +64,26 @@ export const DashBoard = () => {
             <div className="card">
                 <div className="box">
                     <div className="left-side">
-                        <div className="title-card">RECEITAS TOTAIS</div>
+                        <div className="title-card">RECEITA TOTAl</div>
                         <div className="content-card">{info.yield}</div>
-                        <div className="index-card">Subiu</div>
                     </div>
                 </div>
                 <div className="box">
                     <div className="left-side">
-                        <div className="title-card">TOTAL DE ENTREGAS REALIZDAS/MES</div>
+                        <div className="title-card">TOTAL DE ENTREGAS REALIZDAS</div>
                         <div className="content-card">{info.deliveries}</div>
-                        <div className="index-card">Subiu</div>
                     </div>
                 </div>
                 <div className="box">
                     <div className="left-side">
                         <div className="title-card">DATA:</div>
                         <div className="content-card">{info.date}</div>
-                        <div className="index-card">HORARIO ATUAL</div>
                     </div>
                 </div>
                 <div className="box">
                     <div className="left-side">
                         <div className="title-card">VEICULOS DIPONIVEIS PRA SERVIÇO</div>
                         <div className="content-card">{info.available}</div>
-                        <div className="index-card">Subiu</div>
                     </div>
                 </div>
             </div>
@@ -148,21 +150,22 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
     const api = new GlApi();
 
-    useEffect(() => {
-        async function Get() {
-            try {
-                let orders = await api.getOrders();
-                if (orders.length > 0) {
-                    setOrders(orders);
-                }
-            } catch (error) {
-                console.log(error);
+    async function Get() {
+        try {
+            let orders = await api.getOrders();
+            if (orders.length > 0) {
+                setOrders(orders);
             }
-        };
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
         Get();
     }, [])
 
-    const HandleClick = (id: number) => {
+    const HandleClick = (id: string) => {
         let path = "/gl/pedidos/" + id;
         navigate(path);
     }
@@ -192,13 +195,92 @@ export const Pedidos = ({ navigate }: Navigate) => {
         }
     })
 
+    const HandleClickAccept = async (id: string) => {
+        await api.acceptOrder(id, true);
+        Get();
+    }
+
+    const HandleClickReject = async (id: string) => {
+        await api.acceptOrder(id, false);
+        Get();
+    }
+
     return (
         <>
             <Select isClearable options={options} placeholder={"Selecione o Pedido"} styles={OrdersSelectStyle} onChange={HandleChange} noOptionsMessage={() => 'Não Encontrado'} />
             <h1 className="orders-title">{isTherePending ? 'Pendentes' : ''}</h1>
             {orders.map((order, index) => {
                 let status = order.status;
-                if (!status) {
+                let accepted = order.accepted;
+                if (!status && !accepted) {
+                    return (
+                        <div key={index} className="orders-container">
+                            <div className="order">
+                                <div className="row">
+                                    <div className="field" id="desc-field">
+                                        <span>Descrição</span>
+                                        <div className="content-field">{order.desc}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="id-field">
+                                        <span>ID Pedido</span>
+                                        <div className="content-field">{order._id}</div>
+                                    </div>
+                                    <div className="field" id="weith-field">
+                                        <span>Peso</span>
+                                        <div className="content-field">{order.weight} kg</div>
+                                    </div>
+                                    <div className="field" id="amount-field">
+                                        <span>Distancia</span>
+                                        <div className="content-field">{order.distance ? order.distance : 'A definir'}</div>
+                                    </div>
+                                    <div className="field" id="load-field">
+                                        <span>Preço</span>
+                                        <div className="content-field">{order.price ? order.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) : 'A definir'}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-in-field">
+                                        <span>Endereço de Retirada</span>
+                                        <div className="content-field">{order.addressout}</div>
+                                    </div>
+                                    <div className="field-small" id="cep-in">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepin}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-out-field">
+                                        <span>Endereço de Entrega</span>
+                                        <div className="content-field">{order.addressin}</div>
+                                    </div>
+                                    <div className="field-small" id="cep-out">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepout}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="status-field">
+                                        <span>Status</span>
+                                        <div className="content-field">{order.statusdesc}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="buttons-container">
+                                        <button className="button-accept" onClick={() => { HandleClickAccept(order._id) }} >Aceitar Pedido</button>
+                                        <button className="button-reject" onClick={() => { HandleClickReject(order._id) }} >Rejeitar Pedido</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            })}
+            {orders.map((order, index) => {
+                let status = order.status;
+                let accepted = order.accepted;
+                if (!status && accepted) {
                     return (
                         <div key={index} className="orders-container">
                             <div className="order">
@@ -344,7 +426,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
 }
 
-export const AcompanharPedidos = () => {
+export const AcompanharPedidos = ({ navigate }: Navigate) => {
 
     const [order, setOrder] = useState<Order>({
         _id: 999,
@@ -356,11 +438,12 @@ export const AcompanharPedidos = () => {
         cepout: '',
         status: false,
         statusdesc: '',
-        price: 0.0
+        price: 0.0,
+        accepted: false
     });
 
     const [truck, setTruck] = useState<Truck>({
-        _id: 0,
+        _id: '',
         model: '',
         plateNumber: '',
         axle: '',
@@ -369,7 +452,7 @@ export const AcompanharPedidos = () => {
     });
 
     const [driver, setDriver] = useState<Driver>({
-        _id: 0,
+        _id: '',
         name: '',
         status: false
     });
@@ -379,8 +462,8 @@ export const AcompanharPedidos = () => {
 
     const api = new GlApi();
 
-    const [optionsDrivers, setOptionsDrivers] = useState<Option[]>([{ label: '', value: 0 }]);
-    const [optionsTrucks, setOptionsTrucks] = useState<Option[]>([{ label: '', value: 0 }]);
+    const [optionsDrivers, setOptionsDrivers] = useState<Option[]>([{ label: '', value: '' }]);
+    const [optionsTrucks, setOptionsTrucks] = useState<Option[]>([{ label: '', value: '' }]);
 
     useEffect(() => {
 
@@ -436,7 +519,7 @@ export const AcompanharPedidos = () => {
 
         } else {
             setTruck({
-                _id: 0,
+                _id: '',
                 model: '',
                 plateNumber: '',
                 axle: '',
@@ -458,23 +541,28 @@ export const AcompanharPedidos = () => {
 
         } else {
             setDriver({
-                _id: 0,
+                _id: '',
                 name: '',
                 status: false
             });
         }
     }
 
-    const HandleButton = async (_id: number) => {
+    const HandleButton = async (_id: string) => {
 
         if (truck.model != '' && driver.name != '') {
-            const copyDriver: Driver = { ...driver, orderid: _id, status: true};
-            const copyTruck: Truck = { ...truck, orderid: _id , status: true};
+            const copyDriver: Driver = { ...driver, orderid: _id, status: true };
+            const copyTruck: Truck = { ...truck, orderid: _id, status: true };
 
             await api.updateOrder(_id, copyDriver, copyTruck);
+            await api.updateDriver(copyDriver);
+            await api.updateTruck(copyTruck);
+
         } else {
             alert('Aloque os recursos corretamente!');
         }
+
+        navigate('/gl/pedidos');
 
     }
 
@@ -641,7 +729,7 @@ export const Transportes = ({ navigate }: Navigate) => {
         navigate(path);
     }
 
-    const HandleClickDelete = async (_id: number) => {
+    const HandleClickDelete = async (_id: string) => {
         await api.postDeleteTruck(_id);
         Get();
     }
@@ -675,6 +763,10 @@ export const Transportes = ({ navigate }: Navigate) => {
                                     <div className="desc-row">
                                         <h4 className="truck-desc">Status</h4>
                                         <p className="truck-info">{truck.status ? "Indisponivel" : "Disponivel"}</p>
+                                    </div>
+                                    <div className="desc-row">
+                                        <h4 className="truck-desc">{truck.status ? "Pedido ID" : ""}</h4>
+                                        <p className="truck-info">{truck.orderid ? truck.orderid : ""}</p>
                                     </div>
                                     {switchMode && !truck.status && <div onClick={() => { HandleClickDelete(truck._id) }}><X /></div>}
                                 </div>

@@ -1,11 +1,11 @@
 export type Truck = {
-    _id: number;
+    _id: string;
     model: string;
     plateNumber: string;
     axle: string;
     maxcapacity: number;
     status: boolean;
-    orderid?: number;
+    orderid?: string;
 }
 
 export type TruckAdd = { 

@@ -4,3 +4,8 @@ export type GlDashBoard = {
     available: number;
     date: string;
 }
+
+export type GlDashBoardDto = {
+    yield: number;
+    deliveries: number;
+}

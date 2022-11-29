@@ -1,13 +1,40 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { NavigateFunction } from "react-router-dom";
 
 type Props = {
     navigate: NavigateFunction;
+    currentTab: string;
 }
 
-export const GlItens = ({ navigate }: Props) => {
+export const GlItens = ({ navigate, currentTab }: Props) => {
 
-    let [active, setActive] = useState<number>(1);
+    let [active, setActive] = useState<number>(0);
+
+    useEffect(() => {
+
+        function setCurrentTab() {
+
+            switch (currentTab) {
+                case 'DashBoard':
+                    setActive(1);
+                    break;
+                case 'Pedidos':
+                    setActive(2);
+                    break;
+                case 'Garagem':
+                    setActive(3);
+                    break;
+                case 'Motoristas':
+                    setActive(4);;
+                    break;
+            }
+
+        }
+
+        setCurrentTab()
+
+    }, [])
+
 
     function switchActive(type: number) {
 

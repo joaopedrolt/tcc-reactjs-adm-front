@@ -2,7 +2,7 @@ import { Driver } from "./Driver";
 import { Truck } from "./Truck";
 
 export type Order = {
-    _id: number;
+    _id: string;
     desc: string;
     weight: number;
     addressin: string;
@@ -15,4 +15,5 @@ export type Order = {
     truck?: Truck;
     price?: number;
     distance?: string;
+    accepted: boolean;
 }
