@@ -1,0 +1,73 @@
+.mobile-behavior {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 8%;
+}
+
+.menu-mobile-container {
+    background-color: #302c2c;
+    flex: 1;
+    border-radius: 0 0 50% 50%;
+    padding-top: 5%;
+    padding-bottom: 10%;
+}
+
+.menu-perfil-mobile {
+    margin-bottom: 0;
+}
+
+.logo-mobile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100px;
+    flex: 1;
+}
+
+.logo-mobile-behavior {
+    min-width: 280px;
+    width: 34%;
+    height: 100%;
+    background-image: url('../../assets/images/logo.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.logo-mobile-container .logo-header {
+    animation: none;
+}
+
+.logo-mobile-behavior:hover {
+    transform: 0;
+}
+
+.mid-section-container {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-dashboard-buttons{
+    width: 80%;
+    padding-bottom: 25px;
+}
+
+.button-my-orders {
+    margin-top: 25px;
+    background-color: #f36703;
+    color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 40px;
+    padding: 5% 10%;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
