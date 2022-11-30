@@ -2,14 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
-import { ContextProvider } from './contexts/Context'
+import { AuthProvider } from './contexts/ContextAuth'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ContextProvider>
+    <AuthProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </ContextProvider>
+    </AuthProvider>
   </React.StrictMode>
 )

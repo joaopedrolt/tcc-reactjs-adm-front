@@ -1,8 +1,5 @@
 import { NavigateFunction } from "react-router-dom";
 
-import { useContext } from "react";
-import { Context } from "../contexts/Context";
-
 import "../css/default.css";
 import "../css/frame.css";
 import "../css/menu.css";
@@ -19,16 +16,14 @@ type Props = {
 
 const Frame = ({ page, currentTab, navigate }: Props) => {
 
-    const user = useContext(Context);
-
     return (
         <>
             <div className="frame">
                 <div className="menu-area">
                     <div className="menu-perfil">
                         <div className="avatar logistico"></div>
-                        <h3>{user.role}</h3>
-                        <p>{user.name}</p>
+                        <h3>{/* {user.role} */}Joao pedro ada</h3>
+                        <p>{/* {user.name} */}dasdasda</p>
                     </div>
                     <div className="bottom-segment">
                         <nav>

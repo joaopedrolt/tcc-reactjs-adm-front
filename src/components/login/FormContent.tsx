@@ -1,7 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/ContextAuth";
+
+import Login from '../../api/Login.api'
+import { UserLogin } from "../../types/User";
 
 export const FormContent = () => {
+
+    const api = new Login();
+
+    const { setActualRole, setSigned } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     let [user, setUser] = useState<string>("");
     let [password, setPassword] = useState<string>("");
@@ -14,24 +25,35 @@ export const FormContent = () => {
         setPassword(event.target.value);
     }
 
-    const navigate = useNavigate();
+    const HandleSubmit = async () => {
 
-    const HandleSubmit = () => {
-
-        let hasMatched: boolean = false;
-
-        if (user == "admin" && password == "admin") {
-            hasMatched = true;
+        const userLogin: UserLogin = {
+            user,
+            password
         }
 
-        if (hasMatched) {
-            navigate('/gl/dashboard');
+        const userCredentials = await api.checkCredentials(userLogin);
+
+        if (setActualRole && setSigned) {
+            if (userCredentials.logged) {
+                switch (userCredentials.user?.role) {
+                    case 'Gestor Logístico':
+                        setActualRole('gl');
+                        break;
+                }
+                setSigned(true);
+                navigate('/gl/dashboard')
+            } else {
+                console.log('nao logou')
+                setSigned(false);
+                navigate('/')
+            }
         }
 
     }
 
     return (
-        <form onSubmit={HandleSubmit}>
+        <div className="login-form">
             <div className="inputfild">
                 <div className="input-logo">
                     <svg fill="#000000" viewBox="0 0 30 30" width="30px" height="30px">
@@ -50,8 +72,8 @@ export const FormContent = () => {
                 </div>
                 <input type="password" name="pass" placeholder="Senha" value={password} onChange={changeInputPass} />
             </div>
-            <button type="submit">Login</button>
-        </form>
+            <button onClick={HandleSubmit}>Login</button>
+        </div>
     )
 
 }

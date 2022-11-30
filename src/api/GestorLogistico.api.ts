@@ -2,7 +2,7 @@ import { Driver } from "../types/Driver";
 import { GlDashBoardDto } from "../types/GlDashBoard";
 import { Order } from "../types/Order";
 import { Truck, TruckAdd } from "../types/Truck";
-import Api from "./ApiClass.api";
+import Api from "./ApiClass";
 
 class GlApi extends Api {
     constructor() {

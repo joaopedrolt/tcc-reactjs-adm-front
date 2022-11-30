@@ -43,8 +43,6 @@ export const DashBoard = () => {
                 const info = await api.getGlDashBoard();
                 const dateSp = await timezone.getSPDate()
 
-                console.log(info);
-
                 const available = (await api.getAvailibleTrucks()).length;
 
                 if (info[0].yield) {
@@ -429,7 +427,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
 export const AcompanharPedidos = ({ navigate }: Navigate) => {
 
     const [order, setOrder] = useState<Order>({
-        _id: 999,
+        _id: '',
         desc: '',
         weight: 0,
         addressin: '',
