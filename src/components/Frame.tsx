@@ -8,6 +8,9 @@ import "../css/sectiondefaults.css";
 import { GlItens } from "./MenuItens";
 import PageController from "./PageController";
 
+import { useContext } from "react";
+import { UserContext } from "../contexts/ContextUser";
+
 type Props = {
     page: JSX.Element;
     currentTab: string;
@@ -16,14 +19,16 @@ type Props = {
 
 const Frame = ({ page, currentTab, navigate }: Props) => {
 
+    const { user } = useContext(UserContext);
+
     return (
         <>
             <div className="frame">
                 <div className="menu-area">
                     <div className="menu-perfil">
                         <div className="avatar logistico"></div>
-                        <h3>{/* {user.role} */}Joao pedro ada</h3>
-                        <p>{/* {user.name} */}dasdasda</p>
+                        <h3>{user.role}</h3>
+                        <p>{user.name}</p>
                     </div>
                     <div className="bottom-segment">
                         <nav>

@@ -5,8 +5,8 @@ export type User = {
 }
 
 export type UserLoginReponse = {
-    user?: User,
-    logged: boolean
+    user?: User;
+    logged: boolean;
 }
 
 export type UserLogin = {

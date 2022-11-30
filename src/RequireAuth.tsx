@@ -1,25 +1,25 @@
 import { Navigate } from 'react-router-dom'
 
-import { useContext } from "react";
-import { AuthContext } from "./contexts/ContextAuth";
-
 type Props = {
     children: JSX.Element;
 }
 
-const RequireAuth = ({ children }: Props) => {
+export const RequireAuthGl = ({ children }: Props) => {
 
-    const { signed, actualRole } = useContext(AuthContext);
+    const userToken = localStorage.getItem("user_token");
 
-    console.log(signed);
+    let isAuth = false;
 
-    const isAuth = signed;
+    if (userToken) {
+        const token = JSON.parse(userToken);
+        if(token.logged == true && token.role == "Gestor Logístico"){
+            isAuth = true;
+        }
+    } 
 
     if (!isAuth) {
         return <Navigate to={'/'}></Navigate>;
     }
 
     return children;
-}
-
-export default RequireAuth;
+};

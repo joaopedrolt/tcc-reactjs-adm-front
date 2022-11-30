@@ -3,6 +3,8 @@ import "../../css/login.css"
 
 const Login = () => {
 
+    localStorage.clear();
+    
     return (
         <section id="login-screen">
             <div className="login-area">

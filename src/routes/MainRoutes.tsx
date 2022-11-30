@@ -1,5 +1,5 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
-import RequireAuth from "../RequireAuth";
+import { RequireAuthGl } from "../RequireAuth";
 import Login from "../components/login/Login";
 import Frame from "../components/Frame";
 import * as GestorLogistico from "../components/gl/GestorLogistico";
@@ -13,34 +13,34 @@ const MainRoutes = () => {
       <Routes>
         <Route index path="/" element={<Login />} />
         <Route path="/gl/dashboard" element={
-          <RequireAuth>
+          <RequireAuthGl>
             <Frame navigate={navigate} currentTab="DashBoard" page={<GestorLogistico.DashBoard />} />
-          </RequireAuth>
+          </RequireAuthGl>
         } />
         <Route path="/gl/pedidos" element={
-          <RequireAuth>
+          <RequireAuthGl>
             <Frame navigate={navigate} currentTab="Pedidos" page={<GestorLogistico.Pedidos navigate={navigate} />} />
-          </RequireAuth>
+          </RequireAuthGl>
         } />
         <Route path="/gl/pedidos/:id" element={
-          <RequireAuth>
+          <RequireAuthGl>
             <Frame navigate={navigate} currentTab="Pedidos" page={<GestorLogistico.AcompanharPedidos navigate={navigate} />} />
-          </RequireAuth>
+          </RequireAuthGl>
         } />
         <Route path="/gl/garagem" element={
-          <RequireAuth>
+          <RequireAuthGl>
             <Frame navigate={navigate} currentTab="Garagem" page={<GestorLogistico.Transportes navigate={navigate} />} />
-          </RequireAuth>
+          </RequireAuthGl>
         } />
         <Route path="/gl/garagem/add" element={
-          <RequireAuth>
+          <RequireAuthGl>
             <Frame navigate={navigate} currentTab="Garagem" page={<GestorLogistico.AdicionarTransporte navigate={navigate} />} />
-          </RequireAuth>
+          </RequireAuthGl>
         } />
         <Route path="/gl/motoristas" element={
-          <RequireAuth>
+          <RequireAuthGl>
             <Frame navigate={navigate} currentTab="Motoristas" page={<GestorLogistico.Motoristas />} />
-          </RequireAuth>
+          </RequireAuthGl>
         } />
       </Routes>
     </>

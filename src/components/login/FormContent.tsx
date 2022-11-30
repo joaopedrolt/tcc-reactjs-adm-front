@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { useContext } from "react";
-import { AuthContext } from "../../contexts/ContextAuth";
+import { UserContext } from "../../contexts/ContextUser";
 
 import Login from '../../api/Login.api'
 import { UserLogin } from "../../types/User";
@@ -10,7 +11,7 @@ export const FormContent = () => {
 
     const api = new Login();
 
-    const { setActualRole, setSigned } = useContext(AuthContext);
+    const userContext = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -34,20 +35,28 @@ export const FormContent = () => {
 
         const userCredentials = await api.checkCredentials(userLogin);
 
-        if (setActualRole && setSigned) {
-            if (userCredentials.logged) {
-                switch (userCredentials.user?.role) {
-                    case 'Gestor Logístico':
-                        setActualRole('gl');
-                        break;
-                }
-                setSigned(true);
-                navigate('/gl/dashboard')
-            } else {
-                console.log('nao logou')
-                setSigned(false);
-                navigate('/')
+        if (userCredentials.logged && userCredentials.user) {
+
+            const { role, name } = userCredentials.user;
+
+            const logged = true;
+            localStorage.setItem("user_token", JSON.stringify({ role, logged }));
+
+            if (userContext.setUserContext) {
+                userContext.setUserContext({
+                    name: name,
+                    role: role
+                })
             }
+
+            switch (role) {
+                case 'Gestor Logístico':
+                    navigate('/gl/dashboard');
+                    break;
+            }
+
+        } else {
+            navigate('/')
         }
 
     }
