@@ -38,9 +38,10 @@ export const FormContent = () => {
         if (userCredentials.logged && userCredentials.user) {
 
             const { role, name } = userCredentials.user;
-
+            
             const logged = true;
-            localStorage.setItem("user_token", JSON.stringify({ role, logged }));
+            
+            localStorage.setItem("user_token", JSON.stringify({ role, logged, name }));
 
             if (userContext.setUserContext) {
                 userContext.setUserContext({
@@ -50,12 +51,16 @@ export const FormContent = () => {
             }
 
             switch (role) {
+                case 'Motorista':
+                    navigate('/motorista/dashboard');
+                    break;
                 case 'Gestor Logístico':
                     navigate('/gl/dashboard');
                     break;
             }
 
         } else {
+            console.log('aaaa')
             navigate('/')
         }
 

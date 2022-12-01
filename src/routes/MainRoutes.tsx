@@ -18,7 +18,10 @@ const MainRoutes = () => {
         <Route path="/motorista/dashboard" element={
           <MobileFrame page={<Motorista.DashBoard navigate={navigate} />} />
         } />
-
+        <Route path="/motorista/pedidos" element={
+          <MobileFrame page={<Motorista.Pedidos navigate={navigate} />} />
+        } />
+        
         <Route path="/gl/dashboard" element={
           <RequireAuthGl>
             <Frame navigate={navigate} currentTab="DashBoard" page={<GestorLogistico.DashBoard />} />

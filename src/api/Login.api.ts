@@ -12,7 +12,8 @@ class Login extends Api {
         let response = await fetch(this.baseApiPath + 'users/check', {
             method: 'POST',
             body: JSON.stringify(user),
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' ,
+                       'Access-Control-Request-Private-Network': 'true'}
         })
         return await response.json();
     }
