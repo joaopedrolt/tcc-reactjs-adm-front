@@ -11,6 +11,8 @@ export const FormContent = () => {
 
     const api = new Login();
 
+    const { setUserContext } = useContext(UserContext);
+
     const navigate = useNavigate();
 
     let [user, setUser] = useState<string>("");
@@ -36,10 +38,17 @@ export const FormContent = () => {
         if (userCredentials.logged && userCredentials.user) {
 
             const { role, name } = userCredentials.user;
-            
+
             const logged = true;
-            
+
             localStorage.setItem("user_token", JSON.stringify({ role, logged, name }));
+
+            if (setUserContext) {
+                setUserContext({
+                    name: name,
+                    role: role
+                })
+            }
 
             switch (role) {
                 case 'Motorista':

@@ -11,10 +11,26 @@ class MotoristaApi extends Api {
     async getDriverOrder(name: string): Promise<Order> {
         const response = await fetch(this.baseApiPath + 'orders/driverorder', {
             method: 'POST',
-            body: JSON.stringify({name}),
+            body: JSON.stringify({ name }),
             headers: { 'Content-Type': 'application/json' }
         })
         return response.json();
+    }
+
+    async updateOrderDesc(orderUpdateInfo: { orderId: string, statusDesc: string }) {
+        await fetch(this.baseApiPath + 'orders/updatedesc', {
+            method: 'POST',
+            body: JSON.stringify(orderUpdateInfo),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
+    async sumYield(value: number) {
+        await fetch(this.baseApiPath + 'dashboard/sum', {
+            method: 'POST',
+            body: JSON.stringify({ value }),
+            headers: { 'Content-Type': 'application/json' }
+        })
     }
 
 }

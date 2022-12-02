@@ -1,9 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { User } from "../types/User";
 
 type UserContextType = {
     user: User;
-} 
+    setUserContext?: React.Dispatch<React.SetStateAction<User>>;
+}
 
 export const UserContext = createContext<UserContextType>({
     user: {
@@ -23,19 +24,23 @@ export const UserProvider: React.FC<Props> = ({ children }: Props) => {
         role: ''
     });
 
-    useEffect(()=>{
+    function getUser() {
         const userToken = localStorage.getItem("user_token");
 
-        if(userToken){
+        if (userToken) {
             const token = JSON.parse(userToken);
             setUserContext({
                 name: token.name,
                 role: token.role
             })
         }
+    }
+
+    useEffect(() => {
+        getUser();
     }, [])
 
     return (
-        <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+        <UserContext.Provider value={{ user, setUserContext }}>{children}</UserContext.Provider>
     );
 }

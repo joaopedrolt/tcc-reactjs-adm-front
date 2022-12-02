@@ -16,4 +16,5 @@ export type Order = {
     price?: number;
     distance?: string;
     accepted: boolean;
+    finished: boolean;
 }

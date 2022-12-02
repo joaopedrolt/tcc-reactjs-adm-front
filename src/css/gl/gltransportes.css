@@ -56,6 +56,12 @@
     text-align: center;
 }
 
+.order-id-p {
+    width: 80%;
+    word-wrap: break-word;
+    margin: auto;
+}
+
 .button-manage {
     margin: auto;
     align-content: center;
@@ -122,7 +128,7 @@
     margin-top: 5px;
 }
 
-.label-form-add-item{
+.label-form-add-item {
     margin-top: 12px !important;
     margin-bottom: 12px !important;
 }

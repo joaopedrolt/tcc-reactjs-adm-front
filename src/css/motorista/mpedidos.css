@@ -1,31 +1,32 @@
-.orders-mobile-container{
+.orders-mobile-container {
     padding: 20px 0;
 }
 
-.mobile-field{
+.mobile-field {
     text-align: center;
+    word-wrap: break-word
 }
 
-.desc-field-mobile{
+.desc-field-mobile {
     font-weight: 500;
     font-size: 18px;
 }
 
-.button-mobile-container{
+.button-mobile-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.select-mobile{
+.select-mobile {
     width: 75%;
     height: 45px;
     border: 1px solid #d1844d;
     border-radius: 10px;
 }
 
-.input-status-mobile{
+.input-status-mobile {
     width: 75% !important;
     height: 100px;
     border: 1px solid #d1844d;

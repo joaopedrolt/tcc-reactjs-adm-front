@@ -128,7 +128,7 @@ export const Motoristas = () => {
                             </div>
                             <div className="desc-row flex-colunm">
                                 <h4 className="driver-desc">{driver.orderid ? 'Pedido ID' : ''}</h4>
-                                <p className="driver-info">{driver.orderid ? driver.orderid : ''}</p>
+                                <p className="driver-info order-id-p">{driver.orderid ? driver.orderid : ''}</p>
                             </div>
                         </div>
                     </div>
@@ -145,6 +145,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
     let options: Option[] = [];
     let isTherePending: boolean = false;
     let isThereOngoing: boolean = false;
+    let isThereFinished: boolean = false;
 
     const api = new GlApi();
 
@@ -153,6 +154,8 @@ export const Pedidos = ({ navigate }: Navigate) => {
             let orders = await api.getOrders();
             if (orders.length > 0) {
                 setOrders(orders);
+            } else {
+                setOrders([]);
             }
         } catch (error) {
             console.log(error);
@@ -185,12 +188,21 @@ export const Pedidos = ({ navigate }: Navigate) => {
     }
 
     orders.map((order) => {
-        options.push({ label: order.desc, value: order._id });
+
+        if(!order.finished){
+            options.push({ label: order.desc, value: order._id });
+        }
+
+        const finished = order.finished;
+
         if (!order.status) {
             isTherePending = true;
-        } else {
+        } else if (order.status && !finished) {
             isThereOngoing = true;
+        } else if (order.finished) {
+            isThereFinished = true
         }
+
     })
 
     const HandleClickAccept = async (id: string) => {
@@ -208,8 +220,8 @@ export const Pedidos = ({ navigate }: Navigate) => {
             <Select isClearable options={options} placeholder={"Selecione o Pedido"} styles={OrdersSelectStyle} onChange={HandleChange} noOptionsMessage={() => 'Não Encontrado'} />
             <h1 className="orders-title">{isTherePending ? 'Pendentes' : ''}</h1>
             {orders.map((order, index) => {
-                let status = order.status;
-                let accepted = order.accepted;
+                const status = order.status;
+                const accepted = order.accepted;
                 if (!status && !accepted) {
                     return (
                         <div key={index} className="orders-container">
@@ -276,8 +288,8 @@ export const Pedidos = ({ navigate }: Navigate) => {
                 }
             })}
             {orders.map((order, index) => {
-                let status = order.status;
-                let accepted = order.accepted;
+                const status = order.status;
+                const accepted = order.accepted;
                 if (!status && accepted) {
                     return (
                         <div key={index} className="orders-container">
@@ -344,8 +356,9 @@ export const Pedidos = ({ navigate }: Navigate) => {
             })}
             <h1 className="orders-title">{isThereOngoing ? 'Em andamento' : ''}</h1>
             {orders.map((order, index) => {
-                let status = order.status;
-                if (status) {
+                const status = order.status;
+                const finished = order.finished;
+                if (status && !finished) {
                     return (
                         <div key={index} className="orders-container">
                             <div className="order">
@@ -419,6 +432,81 @@ export const Pedidos = ({ navigate }: Navigate) => {
                     )
                 }
             })}
+            <h1 className="orders-title">{isThereFinished ? 'Finalizados' : ''}</h1>
+            {orders.map((order, index) => {
+                const status = order.status;
+                const finished = order.finished;
+                if (status && finished) {
+                    return (
+                        <div key={index} className="orders-container">
+                            <div className="order">
+                                <div className="row">
+                                    <div className="field" id="desc-field">
+                                        <span>Descrição</span>
+                                        <div className="content-field">{order.desc}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="id-field">
+                                        <span>ID Pedido</span>
+                                        <div className="content-field">{order._id}</div>
+                                    </div>
+                                    <div className="field" id="weith-field">
+                                        <span>Peso</span>
+                                        <div className="content-field">{order.weight} kg</div>
+                                    </div>
+                                    <div className="field" id="amount-field">
+                                        <span>Distancia</span>
+                                        <div className="content-field">{order.distance ? order.distance : 'A definir'}</div>
+                                    </div>
+                                    <div className="field" id="load-field">
+                                        <span>Preço</span>
+                                        <div className="content-field">{order.price ? order.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) : 'A definir'}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-in-field">
+                                        <span>Endereço de Retirada</span>
+                                        <div className="content-field">{order.addressout}</div>
+                                    </div>
+                                    <div className="field-small" id="cep-in">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepin}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="address-out-field">
+                                        <span>Endereço de Entrega</span>
+                                        <div className="content-field">{order.addressin}</div>
+                                    </div>
+                                    <div className="field-small" id="cep-out">
+                                        <span>Cep</span>
+                                        <div className="content-field">{order.cepout}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="status-field">
+                                        <span>Status</span>
+                                        <div className="content-field">{order.statusdesc}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="id-field">
+                                        <span>Entregue por</span>
+                                        <div className="content-field">{order.driver?.name}</div>
+                                    </div>
+                                    <div className="field" id="weith-field">
+                                        <span>Veiculo Utilizado</span>
+                                        <div className="content-field">{order.truck?.model}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            })
+            }
+
         </>
     )
 
@@ -437,7 +525,8 @@ export const AcompanharPedidos = ({ navigate }: Navigate) => {
         status: false,
         statusdesc: '',
         price: 0.0,
-        accepted: false
+        accepted: false,
+        finished: false
     });
 
     const [truck, setTruck] = useState<Truck>({
@@ -764,7 +853,7 @@ export const Transportes = ({ navigate }: Navigate) => {
                                     </div>
                                     <div className="desc-row">
                                         <h4 className="truck-desc">{truck.status ? "Pedido ID" : ""}</h4>
-                                        <p className="truck-info">{truck.orderid ? truck.orderid : ""}</p>
+                                        <p className="truck-info order-id-p">{truck.orderid ? truck.orderid : ""}</p>
                                     </div>
                                     {switchMode && !truck.status && <div onClick={() => { HandleClickDelete(truck._id) }}><X /></div>}
                                 </div>

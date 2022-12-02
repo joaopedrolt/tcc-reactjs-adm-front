@@ -3,8 +3,9 @@ import { RequireAuthGl } from "../RequireAuth";
 import Login from "../components/login/Login";
 import Frame from "../components/Frame";
 import { MobileFrame } from "../components/MobileFrame";
-import * as GestorLogistico from "../components/gl/GestorLogistico";
-import * as Motorista from "../components/gl/Motorista";
+import * as GestorLogistico from "../components/roles/GestorLogistico";
+import * as Motorista from "../components/roles/Motorista";
+import { Navigate } from 'react-router-dom' 
 
 const MainRoutes = () => {
 
@@ -14,6 +15,8 @@ const MainRoutes = () => {
     <>
       <Routes>
         <Route index path="/" element={<Login />} />
+
+        <Route index path="/emitirpedido" element={<Login />} />
 
         <Route path="/motorista/dashboard" element={
           <MobileFrame page={<Motorista.DashBoard navigate={navigate} />} />
@@ -52,6 +55,7 @@ const MainRoutes = () => {
             <Frame navigate={navigate} currentTab="Motoristas" page={<GestorLogistico.Motoristas />} />
           </RequireAuthGl>
         } />
+        <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>
     </>
   )
