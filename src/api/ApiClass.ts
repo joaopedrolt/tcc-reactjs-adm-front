@@ -5,7 +5,7 @@ class Api {
     private baseLocal: string = "http://localhost:3000/api/"
 
     public getBase(): string {
-        return this.baseLocal;
+        return this.base;
     }
 }
 
