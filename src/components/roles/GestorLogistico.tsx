@@ -64,13 +64,13 @@ export const DashBoard = () => {
             <div className="card">
                 <div className="box">
                     <div className="left-side">
-                        <div className="title-card">RECEITA TOTAl</div>
+                        <div className="title-card">RECEITA TOTAL</div>
                         <div className="content-card">{info.yield}</div>
                     </div>
                 </div>
                 <div className="box">
                     <div className="left-side">
-                        <div className="title-card">TOTAL DE ENTREGAS REALIZDAS</div>
+                        <div className="title-card">TOTAL DE ENTREGAS REALIZADAS</div>
                         <div className="content-card">{info.deliveries}</div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-in-field">
                                         <span>Endereço de Retirada</span>
-                                        <div className="content-field">{order.addressout}</div>
+                                        <div className="content-field">{order.addressin}</div>
                                     </div>
                                     <div className="field-small" id="cep-in">
                                         <span>Cep</span>
@@ -216,7 +216,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-out-field">
                                         <span>Endereço de Entrega</span>
-                                        <div className="content-field">{order.addressin}</div>
+                                        <div className="content-field">{order.addressout}</div>
                                     </div>
                                     <div className="field-small" id="cep-out">
                                         <span>Cep</span>
@@ -274,7 +274,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-in-field">
                                         <span>Endereço de Retirada</span>
-                                        <div className="content-field">{order.addressout}</div>
+                                        <div className="content-field">{order.addressin}</div>
                                     </div>
                                     <div className="field-small" id="cep-in">
                                         <span>Cep</span>
@@ -284,7 +284,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-out-field">
                                         <span>Endereço de Entrega</span>
-                                        <div className="content-field">{order.addressin}</div>
+                                        <div className="content-field">{order.addressout}</div>
                                     </div>
                                     <div className="field-small" id="cep-out">
                                         <span>Cep</span>
@@ -342,7 +342,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-in-field">
                                         <span>Endereço de Retirada</span>
-                                        <div className="content-field">{order.addressout}</div>
+                                        <div className="content-field">{order.addressin}</div>
                                     </div>
                                     <div className="field-small" id="cep-in">
                                         <span>Cep</span>
@@ -352,7 +352,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-out-field">
                                         <span>Endereço de Entrega</span>
-                                        <div className="content-field">{order.addressin}</div>
+                                        <div className="content-field">{order.addressout}</div>
                                     </div>
                                     <div className="field-small" id="cep-out">
                                         <span>Cep</span>
@@ -420,7 +420,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-in-field">
                                         <span>Endereço de Retirada</span>
-                                        <div className="content-field">{order.addressout}</div>
+                                        <div className="content-field">{order.addressin}</div>
                                     </div>
                                     <div className="field-small" id="cep-in">
                                         <span>Cep</span>
@@ -430,7 +430,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field" id="address-out-field">
                                         <span>Endereço de Entrega</span>
-                                        <div className="content-field">{order.addressin}</div>
+                                        <div className="content-field">{order.addressout}</div>
                                     </div>
                                     <div className="field-small" id="cep-out">
                                         <span>Cep</span>
@@ -533,7 +533,9 @@ export const AcompanharPedidos = ({ navigate }: Navigate) => {
                 setOptionsDrivers(copyDrivers);
 
                 availibleTrucks.forEach((truck) => {
-                    copyTrucks.push({ label: truck.model, value: truck._id })
+                    if( truck.maxcapacity >= order.weight){
+                        copyTrucks.push({ label: truck.model, value: truck._id })
+                    }
                 })
 
                 setOptionsTrucks(copyTrucks);
@@ -679,7 +681,7 @@ export const AcompanharPedidos = ({ navigate }: Navigate) => {
                     <div className="row">
                         <div className="field" id="address-in-field">
                             <span>Endereço de Retirada</span>
-                            <div className="content-field">{order.addressout}</div>
+                            <div className="content-field">{order.addressin}</div>
                         </div>
                         <div className="field-small" id="cep-in">
                             <span>Cep</span>
@@ -689,7 +691,7 @@ export const AcompanharPedidos = ({ navigate }: Navigate) => {
                     <div className="row">
                         <div className="field" id="address-out-field">
                             <span>Endereço de Entrega</span>
-                            <div className="content-field">{order.addressin}</div>
+                            <div className="content-field">{order.addressout}</div>
                         </div>
                         <div className="field-small" id="cep-out">
                             <span>Cep</span>

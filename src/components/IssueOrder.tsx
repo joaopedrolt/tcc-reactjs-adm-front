@@ -117,7 +117,7 @@ const IssueOrder = ({ navigate }: Navigate) => {
                             <div className="row">
                                 <div className="field" id="address-in-field">
                                     <span>Endereço de Entrega</span>
-                                    <input value={inputAddressOut} onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setInputAddressOut(e.target.value) }} className="content-field"></input>
+                                    <input readOnly value={inputAddressOut} onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setInputAddressOut(e.target.value) }} className="content-field"></input>
                                 </div>
                             </div>
                             <div className="row">
