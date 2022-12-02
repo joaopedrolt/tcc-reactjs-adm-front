@@ -1,5 +1,6 @@
 import { NavigateFunction } from "react-router-dom";
 
+import "../css/section.css";
 import "../css/default.css";
 import "../css/frame.css";
 import "../css/menu.css";

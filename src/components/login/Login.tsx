@@ -1,6 +1,5 @@
 import FormContent from "./FormContent";
 import "../../css/login.css"
-import "../../css/sectiondefaults.css";
 
 const Login = () => {
 
