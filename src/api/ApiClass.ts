@@ -1,7 +1,7 @@
 class Api {
     constructor() {}
 
-    private base: string = "http://10.158.0.2:3000/api/"
+    private base: string = "http://34.151.229.81:3000/api/"
 
     public getBase(): string {
         return this.base;
