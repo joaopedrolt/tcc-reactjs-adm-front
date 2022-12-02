@@ -11,8 +11,6 @@ export const FormContent = () => {
 
     const api = new Login();
 
-    const userContext = useContext(UserContext);
-
     const navigate = useNavigate();
 
     let [user, setUser] = useState<string>("");
@@ -43,13 +41,6 @@ export const FormContent = () => {
             
             localStorage.setItem("user_token", JSON.stringify({ role, logged, name }));
 
-            if (userContext.setUserContext) {
-                userContext.setUserContext({
-                    name: name,
-                    role: role
-                })
-            }
-
             switch (role) {
                 case 'Motorista':
                     navigate('/motorista/dashboard');
@@ -60,8 +51,7 @@ export const FormContent = () => {
             }
 
         } else {
-            console.log('aaaa')
-            navigate('/')
+            alert('Usuário ou senha incorreto');
         }
 
     }

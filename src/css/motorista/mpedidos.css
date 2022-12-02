@@ -1,3 +1,35 @@
 .orders-mobile-container{
-    padding: 40px 0;
+    padding: 20px 0;
+}
+
+.mobile-field{
+    text-align: center;
+}
+
+.desc-field-mobile{
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.button-mobile-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.select-mobile{
+    width: 75%;
+    height: 45px;
+    border: 1px solid #d1844d;
+    border-radius: 10px;
+}
+
+.input-status-mobile{
+    width: 75% !important;
+    height: 100px;
+    border: 1px solid #d1844d;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    padding: 15px;
 }

@@ -11,6 +11,7 @@
     border-radius: 0 0 50% 50%;
     padding-top: 5%;
     padding-bottom: 10%;
+    max-height: 300px;
 }
 
 .menu-perfil-mobile {
@@ -28,7 +29,7 @@
 .logo-mobile-behavior {
     min-width: 280px;
     width: 34%;
-    height: 100%;
+    height: 130px;
     background-image: url('../../assets/images/logo.png');
     background-size: cover;
     background-repeat: no-repeat;
@@ -57,6 +58,10 @@
 .mobile-dashboard-buttons{
     width: 80%;
     padding-bottom: 25px;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .button-my-orders {
@@ -73,4 +78,38 @@
     text-align: center;
     border-radius: 6px;
     box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.button-mobile{
+    width: 60%;
+}
+
+.button-green {
+    background-color: #59d250 !important;
+}
+
+.button-red {
+    background-color: #d14d4d !important; 
+}
+
+.button-100{
+    width: 100%;
+}
+
+@media (min-width: 1156px) {
+
+    .mobile-behavior{
+        padding-bottom: 40px;
+    }
+
+    .menu-mobile-container {
+        padding-top: 40px;
+        padding-bottom: 50px;
+    }
+
+
+    .logo-mobile-behavior {
+        width: 0;
+        height: 0;
+    }
 }
