@@ -7,6 +7,7 @@ import { NavigateFunction } from "react-router-dom";
 import MotoristaApi from "../../api/Motorista.api ";
 
 import { Order } from "../../types/Order";
+import { Truck } from "../../types/Truck";
 
 type Navigate = {
     navigate: NavigateFunction;
@@ -130,6 +131,28 @@ export const Pedidos = ({ navigate }: Navigate) => {
             if (orders[0].price) {
                 api.sumYield(orders[0].price);
             }
+
+            if(orders[0].driver){
+                const resetDriver = {
+                    _id: orders[0].driver._id,
+                    name: orders[0].driver.name,
+                    status: false
+                }
+                api.resetDriver(resetDriver);
+            }
+
+            if(orders[0].truck){
+                const resetTruck: Truck = {
+                    _id: orders[0].truck._id,
+                    model: orders[0].truck.model,
+                    plateNumber: orders[0].truck.plateNumber,
+                    axle: orders[0].truck.axle,
+                    maxcapacity: orders[0].truck.maxcapacity,
+                    status: false
+                }
+                api.resetTruck(resetTruck);
+            }
+
             alert('Pedido Finalizado');
             navigate('motorista/dashboard')
         } else if (selectedOption != '') {

@@ -1,11 +1,12 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { RequireAuthGl } from "../RequireAuth";
+import { RequireAuthGl, RequireAuthMotorista } from "../RequireAuth";
 import Login from "../components/login/Login";
 import Frame from "../components/Frame";
 import { MobileFrame } from "../components/MobileFrame";
 import * as GestorLogistico from "../components/roles/GestorLogistico";
 import * as Motorista from "../components/roles/Motorista";
-import { Navigate } from 'react-router-dom' 
+import { Navigate } from 'react-router-dom'
+import IssueOrder from "../components/IssueOrder";
 
 const MainRoutes = () => {
 
@@ -16,15 +17,19 @@ const MainRoutes = () => {
       <Routes>
         <Route index path="/" element={<Login />} />
 
-        <Route index path="/emitirpedido" element={<Login />} />
+        <Route index path="/emitirpedido" element={<IssueOrder navigate={navigate} />} />
 
         <Route path="/motorista/dashboard" element={
-          <MobileFrame page={<Motorista.DashBoard navigate={navigate} />} />
+          <RequireAuthMotorista>
+            <MobileFrame page={<Motorista.DashBoard navigate={navigate} />} />
+          </RequireAuthMotorista>
         } />
         <Route path="/motorista/pedidos" element={
-          <MobileFrame page={<Motorista.Pedidos navigate={navigate} />} />
+          <RequireAuthMotorista>
+            <MobileFrame page={<Motorista.Pedidos navigate={navigate} />} />
+          </RequireAuthMotorista>
         } />
-        
+
         <Route path="/gl/dashboard" element={
           <RequireAuthGl>
             <Frame navigate={navigate} currentTab="DashBoard" page={<GestorLogistico.DashBoard />} />
@@ -52,7 +57,12 @@ const MainRoutes = () => {
         } />
         <Route path="/gl/motoristas" element={
           <RequireAuthGl>
-            <Frame navigate={navigate} currentTab="Motoristas" page={<GestorLogistico.Motoristas />} />
+            <Frame navigate={navigate} currentTab="Motoristas" page={<GestorLogistico.Motoristas navigate={navigate} />} />
+          </RequireAuthGl>
+        } />
+        <Route path="/gl/motoristas/add" element={
+          <RequireAuthGl>
+            <Frame navigate={navigate} currentTab="Motoristas" page={<GestorLogistico.AdicionarMotorista navigate={navigate} />} />
           </RequireAuthGl>
         } />
         <Route path="*" element={<Navigate to={"/"} />} />

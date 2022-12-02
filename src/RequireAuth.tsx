@@ -23,3 +23,23 @@ export const RequireAuthGl = ({ children }: Props) => {
 
     return children;
 };
+
+export const RequireAuthMotorista = ({ children }: Props) => {
+
+    const userToken = localStorage.getItem("user_token");
+
+    let isAuth = false;
+
+    if (userToken) {
+        const token = JSON.parse(userToken);
+        if(token.logged == true && token.role == "Motorista"){
+            isAuth = true;
+        }
+    } 
+
+    if (!isAuth) {
+        return <Navigate to={'/'}></Navigate>;
+    }
+
+    return children;
+};

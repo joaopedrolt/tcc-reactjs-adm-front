@@ -4,3 +4,8 @@ export type Driver = {
     status: boolean;
     orderid?: string;
 }
+
+export type NewDriver = {
+    name: string;
+    status: boolean;
+}

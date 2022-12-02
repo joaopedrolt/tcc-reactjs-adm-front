@@ -18,3 +18,12 @@ export type Order = {
     accepted: boolean;
     finished: boolean;
 }
+
+export type OrderAdd = {
+    desc: string;
+    weight: number;
+    addressin: string;
+    cepin: string;
+    addressout: string;
+    cepout: string;
+}

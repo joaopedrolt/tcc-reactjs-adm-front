@@ -17,9 +17,11 @@ import TimeZone from "../../api/TimeZone.api";
 
 import { Truck, TruckAdd } from "../../types/Truck";
 import { Order } from "../../types/Order";
-import { Driver } from "../../types/Driver";
+import { Driver, NewDriver } from "../../types/Driver";
 import { GlDashBoard } from "../../types/GlDashBoard";
 import { Option } from "../../types/Option";
+import MotoristaApi from "../../api/Motorista.api ";
+import { UserAdd } from "../../types/User";
 
 type Navigate = {
     navigate: NavigateFunction;
@@ -45,7 +47,7 @@ export const DashBoard = () => {
 
                 const available = (await api.getAvailibleTrucks()).length;
 
-                if (info[0].yield) {
+                if (info[0]) {
                     const yieldString = info[0].yield.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
                     const infoCopy: GlDashBoard = { ...info[0], yield: yieldString, date: dateSp, available: available };
                     setInfo(infoCopy);
@@ -84,55 +86,6 @@ export const DashBoard = () => {
                         <div className="content-card">{info.available}</div>
                     </div>
                 </div>
-            </div>
-        </div>
-    )
-
-}
-
-export const Motoristas = () => {
-
-    const [drivers, setDrivers] = useState<Driver[]>([]);
-
-    const api = new GlApi();
-
-    useEffect(() => {
-        async function Get() {
-            try {
-                let drivers = await api.getDrivers();
-                if (drivers.length > 0) {
-                    setDrivers(drivers);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        Get();
-    }, [])
-
-    return (
-        <div className="flex-colunm">
-            <h1 className="drivers-title">Situação Motoristas</h1>
-            <div className="drivers">
-
-                {drivers.map((driver, index) => (
-                    <div className="driver-card">
-                        <div className="driver-card-top flex-colunm">
-                            <div className="driver-img-container"></div>
-                            <h3 className="driver-name">{driver.name}</h3>
-                        </div>
-                        <div className="driver-card-bottom">
-                            <div className="desc-row flex-colunm">
-                                <h4 className="driver-desc">Status</h4>
-                                <p className="driver-info">{driver.status ? 'Em entrega' : 'Disponivel'}</p>
-                            </div>
-                            <div className="desc-row flex-colunm">
-                                <h4 className="driver-desc">{driver.orderid ? 'Pedido ID' : ''}</h4>
-                                <p className="driver-info order-id-p">{driver.orderid ? driver.orderid : ''}</p>
-                            </div>
-                        </div>
-                    </div>
-                ))}
             </div>
         </div>
     )
@@ -189,7 +142,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
     orders.map((order) => {
 
-        if(!order.finished){
+        if (!order.finished) {
             options.push({ label: order.desc, value: order._id });
         }
 
@@ -797,7 +750,11 @@ export const Transportes = ({ navigate }: Navigate) => {
             if (trucks.length > 0) {
                 setGarage(trucks);
                 setLoadStatus(false);
+            } else {
+                setGarage([]);
+                setLoadStatus(false);
             }
+
         } catch (error) {
             console.log(error);
         }
@@ -860,7 +817,6 @@ export const Transportes = ({ navigate }: Navigate) => {
                             </div>
                         ))} </>
                 }
-
             </div>
             <button onClick={ToggleMode} className="button-manage">{!switchMode ? "Gerenciar Veículos" : '\u2190 Retornar'}</button>
             {switchMode && <button onClick={HandleClickAdd} className="button-manage-add">Adicionar Veículo</button>}
@@ -945,6 +901,157 @@ export const AdicionarTransporte = ({ navigate }: Navigate) => {
                         </div>
                     </div>
                     <button onClick={HandleCLick} className="button-manage-add">Adicionar Veículo</button>
+                </div>
+            </div>
+        </>
+    )
+
+}
+
+export const Motoristas = ({ navigate }: Navigate) => {
+
+    const [drivers, setDrivers] = useState<Driver[]>([]);
+    const [switchMode, setMode] = useState<boolean>(false);
+
+    const api = new GlApi();
+
+    async function Get() {
+        try {
+            let drivers = await api.getDrivers();
+            if (drivers.length > 0) {
+                setDrivers(drivers);
+            } else {
+                setDrivers([]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        Get();
+    }, [])
+
+    const ToggleMode = () => {
+        switchMode ? setMode(false) : setMode(true);
+    }
+
+    const HandleClickAdd = () => {
+        const path = "/gl/motoristas/add";
+        navigate(path);
+    }
+
+    const HandleClickDelete = async (id: string, name: string) => {
+        await api.removeDriverLogin({ name });
+        await api.removeDriver({ id });
+        Get();
+    }
+
+    return (
+        <div className="flex-colunm">
+            <h1 className="drivers-title">Situação Motoristas</h1>
+            <div className="drivers">
+
+                {drivers.map((driver, index) => (
+                    <div key={index} className="driver-card">
+                        <div className="driver-card-top flex-colunm">
+                            <div className="driver-img-container"></div>
+                            <h3 className="driver-name">{driver.name}</h3>
+                        </div>
+                        <div className="driver-card-bottom">
+                            <div className="desc-row flex-colunm">
+                                <h4 className="driver-desc">Status</h4>
+                                <p className="driver-info">{driver.status ? 'Em entrega' : 'Disponivel'}</p>
+                            </div>
+                            <div className="desc-row flex-colunm">
+                                <h4 className="driver-desc">{driver.orderid ? 'Pedido ID' : ''}</h4>
+                                <p className="driver-info order-id-p">{driver.orderid ? driver.orderid : ''}</p>
+                            </div>
+                            {switchMode && !driver.status && <div className="fit-content" onClick={() => { HandleClickDelete(driver._id, driver.name) }}><X /></div>}
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <button onClick={ToggleMode} className="button-manage">{!switchMode ? "Gerenciar Motoristas" : '\u2190 Retornar'}</button>
+            {switchMode && <button onClick={HandleClickAdd} className="button-manage-add">Adicionar Motorista</button>}
+        </div>
+    )
+
+}
+
+export const AdicionarMotorista = ({ navigate }: Navigate) => {
+
+    const [name, setName] = useState("");
+    const [user, setUser] = useState("");
+    const [password, setPassword] = useState("");
+
+    const changeInput = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
+        switch (id) {
+            case 'name':
+                setName(event.target.value);
+                break;
+            case 'user':
+                setUser(event.target.value);
+                break;
+            case 'password':
+                setPassword(event.target.value);
+                break;
+        }
+    }
+
+    const api = new GlApi();
+
+    const HandleCLick = () => {
+
+        if (
+            (name == '' || name == undefined) ||
+            (user == '' || user == undefined) ||
+            (password == '' || password == undefined)
+        ) { alert('Insira os Dados Corretamente!') } else {
+
+            const newDriver: NewDriver = {
+                name,
+                status: false
+            }
+
+            api.addDriver(newDriver);
+
+            const newUser: UserAdd = {
+                name,
+                user,
+                password,
+                role: "Motorista"
+            }
+
+            api.addUser(newUser);
+
+            const path = "/gl/motoristas/";
+            navigate(path);
+
+        }
+
+    }
+
+    return (
+        <>
+            <h1 className="garage-title">Adicionar Motorista</h1>
+            <div className="container-form-add">
+                <div className="flex-colunm">
+                    <div className="col">
+                        <div className="inputbox">
+                            <span>Nome</span>
+                            <input value={name} onChange={(e) => { changeInput(e, 'name') }} className="label-form-add-item" type="text" />
+                        </div>
+                        <div className="inputbox">
+                            <span>Credencial de acesso</span>
+                            <input value={user} onChange={(e) => { changeInput(e, 'user') }} className="label-form-add-item" type="text" />
+                        </div>
+                        <div className="inputbox">
+                            <span>Senha de acesso</span>
+                            <input value={password} onChange={(e) => { changeInput(e, 'password') }} className="label-form-add-item" type="text" />
+                        </div>
+                    </div>
+                    <button onClick={HandleCLick} className="button-manage-add">Adicionar Motorista</button>
                 </div>
             </div>
         </>

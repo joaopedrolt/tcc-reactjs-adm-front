@@ -22,4 +22,9 @@ ul {
     align-items: center;
 }
 
+.fit-content{
+    width: fit-content;
+    margin: auto;
+}
+
 /* Adicione apartir daqui, nao mexer no em cima */

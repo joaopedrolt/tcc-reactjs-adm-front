@@ -46,19 +46,13 @@ p {
 }
 
 .logistico {
-    background-image: url('../assets/avatars/tem-giga-chad.jpg'); 
+    background-image: url('../assets/avatars/logistico.png'); 
     background-position: center;
     background-size: cover;
 }
 
-.marcos {
-    background-image: url('./images/avatar/marcos.jpeg');
-    background-position: top;
-    background-size: cover;
-}
-
-.gabriel {
-    background-image: url('./images/avatar/gabriel.jpeg');
+.motorista {
+    background-image: url('../assets/avatars/motorista.jpg');
     background-position: center;
     background-size: cover;
 }

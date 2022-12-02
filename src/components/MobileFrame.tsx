@@ -16,7 +16,7 @@ export const MobileFrame = ({ page }: Navigate) => {
         <div className="mobile-behavior">
             <div className="menu-mobile-container">
                 <div className="menu-perfil menu-perfil-mobile">
-                    <div className="avatar joao"></div>
+                    <div className="avatar motorista"></div>
                     <h3>{user.role}</h3>
                     <p>{user.name}</p>
                 </div>

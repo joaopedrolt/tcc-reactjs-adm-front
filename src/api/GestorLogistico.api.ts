@@ -1,7 +1,8 @@
-import { Driver } from "../types/Driver";
+import { Driver, NewDriver } from "../types/Driver";
 import { GlDashBoardDto } from "../types/GlDashBoard";
 import { Order } from "../types/Order";
 import { Truck, TruckAdd } from "../types/Truck";
+import { UserAdd } from "../types/User";
 import Api from "./ApiClass";
 
 class GlApi extends Api {
@@ -95,6 +96,39 @@ class GlApi extends Api {
             headers: { 'Content-Type': 'application/json' }
         })
     }
+
+    async addDriver(newDriver: NewDriver) {
+        await fetch(this.baseApiPath + 'drivers/add', {
+            method: 'POST',
+            body: JSON.stringify(newDriver),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
+    async removeDriver(param: { id: string }) {
+        await fetch(this.baseApiPath + 'drivers/delete', {
+            method: 'POST',
+            body: JSON.stringify(param),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
+    async removeDriverLogin(param: { name: string }) {
+        await fetch(this.baseApiPath + 'users/delete', {
+            method: 'POST',
+            body: JSON.stringify(param),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
+    async addUser(user: UserAdd) {
+        await fetch(this.baseApiPath + 'users/add', {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
 
 }
 

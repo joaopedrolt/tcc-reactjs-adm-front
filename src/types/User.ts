@@ -13,3 +13,10 @@ export type UserLogin = {
     user: string;
     password: string;
 }
+
+export type UserAdd = {
+    role: string;
+    name: string;
+    user: string;
+    password: string;
+}

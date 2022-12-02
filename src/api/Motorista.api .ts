@@ -1,4 +1,6 @@
+import { Driver, NewDriver } from "../types/Driver";
 import { Order } from "../types/Order";
+import { Truck } from "../types/Truck";
 import Api from "./ApiClass";
 
 class MotoristaApi extends Api {
@@ -29,6 +31,22 @@ class MotoristaApi extends Api {
         await fetch(this.baseApiPath + 'dashboard/sum', {
             method: 'POST',
             body: JSON.stringify({ value }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
+    async resetDriver(driver: Driver) {
+        await fetch(this.baseApiPath + 'drivers/reset', {
+            method: 'POST',
+            body: JSON.stringify(driver),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
+    async resetTruck(truck: Truck) {
+        await fetch(this.baseApiPath + 'garage/reset', {
+            method: 'POST',
+            body: JSON.stringify(truck),
             headers: { 'Content-Type': 'application/json' }
         })
     }
