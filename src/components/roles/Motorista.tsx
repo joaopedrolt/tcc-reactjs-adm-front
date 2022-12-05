@@ -210,18 +210,18 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 <div className="row">
                                     <div className="field mobile-field" id="address-in-field">
                                         <span className="desc-field-mobile">Distancia</span>
-                                        <div className="content-field mobile-field">{orders[0].distance} km</div>
+                                        <div className="content-field mobile-field">{orders[0].distance}</div>
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="field mobile-field" id="address-in-field">
                                         <span className="desc-field-mobile">Endereço de Retirada</span>
-                                        <div className="content-field mobile-field">{orders[0].cepin}</div>
+                                        <div className="content-field mobile-field">{orders[0].addressin}</div>
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="field mobile-field" id="cep-in">
-                                        <span className="desc-field-mobile">Cep</span>
+                                        <span className="desc-field-mobile">Cep - Retirada</span>
                                         <div className="content-field mobile-field">{orders[0].cepin}</div>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 </div>
                                 <div className="row">
                                     <div className="field mobile-field" id="cep-in">
-                                        <span className="desc-field-mobile">Cep</span>
+                                        <span className="desc-field-mobile">Cep - Entrega</span>
                                         <div className="content-field mobile-field">{orders[0].cepout}</div>
                                     </div>
                                 </div>

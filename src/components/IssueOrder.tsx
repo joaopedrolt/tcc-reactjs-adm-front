@@ -43,7 +43,7 @@ const IssueOrder = ({ navigate }: Navigate) => {
             setCepOut(value);
         } else {
             alert('Insira um Cep de entrega valido');
-            setInputAddressIn('');
+            setInputAddressOut('');
             setInputNumOut('');
         }
     }
@@ -65,7 +65,7 @@ const IssueOrder = ({ navigate }: Navigate) => {
                 addressout: inputAddressOut + ', n: ' + inputNumOut,
                 cepout: cepOut,
             }
-            api.postNewTruck(newOrder);
+            api.postNewOrder(newOrder);
         }
 
     }

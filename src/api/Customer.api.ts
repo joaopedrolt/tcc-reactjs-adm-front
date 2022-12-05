@@ -13,7 +13,7 @@ class Customer extends Api {
         return response.json();
     }
 
-    async postNewTruck(order: OrderAdd) {
+    async postNewOrder(order: OrderAdd) {
         await fetch(this.baseApiPath + 'orders/add', {
             method: 'POST',
             body: JSON.stringify(order),

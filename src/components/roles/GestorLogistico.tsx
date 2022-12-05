@@ -158,8 +158,9 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
     })
 
-    const HandleClickAccept = async (id: string) => {
+    const HandleClickAccept = async (id: string, customerId: string) => {
         await api.acceptOrder(id, true);
+        await api.pushNewCustomerOrder(id, customerId)
         Get();
     }
 
@@ -224,6 +225,26 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                     </div>
                                 </div>
                                 <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Nome da Empresa</span>
+                                        <div className="content-field">{order.customer.name}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Cnpj da Empresa</span>
+                                        <div className="content-field">{order.customer.cnpj}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Email da Empresa</span>
+                                        <div className="content-field">{order.customer.email}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Telefone da Empresa</span>
+                                        <div className="content-field">{order.customer.numero}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
                                     <div className="field" id="status-field">
                                         <span>Status</span>
                                         <div className="content-field">{order.statusdesc}</div>
@@ -231,7 +252,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 </div>
                                 <div className="row">
                                     <div className="buttons-container">
-                                        <button className="button-accept" onClick={() => { HandleClickAccept(order._id) }} >Aceitar Pedido</button>
+                                        <button className="button-accept" onClick={() => { HandleClickAccept(order._id, order.customer._id) }} >Aceitar Pedido</button>
                                         <button className="button-reject" onClick={() => { HandleClickReject(order._id) }} >Rejeitar Pedido</button>
                                     </div>
                                 </div>
@@ -292,6 +313,26 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                     </div>
                                 </div>
                                 <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Nome da Empresa</span>
+                                        <div className="content-field">{order.customer.name}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Cnpj da Empresa</span>
+                                        <div className="content-field">{order.customer.cnpj}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Email da Empresa</span>
+                                        <div className="content-field">{order.customer.email}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Telefone da Empresa</span>
+                                        <div className="content-field">{order.customer.numero}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
                                     <div className="field" id="status-field">
                                         <span>Status</span>
                                         <div className="content-field">{order.statusdesc}</div>
@@ -299,7 +340,10 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                 </div>
                                 <div className="row">
                                     <div>
-                                        <button className="button-orders" onClick={() => { HandleClick(order._id) }} >Acompanhar Pedido</button>
+                                        {order.statusdesc == 'Aguardando Pagamento' ? <></> :
+                                            <button className="button-orders" onClick={() => { HandleClick(order._id) }}>
+                                                Acompanhar Pedido
+                                            </button>}
                                     </div>
                                 </div>
                             </div>
@@ -357,6 +401,26 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                     <div className="field-small" id="cep-out">
                                         <span>Cep</span>
                                         <div className="content-field">{order.cepout}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Nome da Empresa</span>
+                                        <div className="content-field">{order.customer.name}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Cnpj da Empresa</span>
+                                        <div className="content-field">{order.customer.cnpj}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Email da Empresa</span>
+                                        <div className="content-field">{order.customer.email}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Telefone da Empresa</span>
+                                        <div className="content-field">{order.customer.numero}</div>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -438,6 +502,26 @@ export const Pedidos = ({ navigate }: Navigate) => {
                                     </div>
                                 </div>
                                 <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Nome da Empresa</span>
+                                        <div className="content-field">{order.customer.name}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="field" id="cep-in">
+                                        <span>Cnpj da Empresa</span>
+                                        <div className="content-field">{order.customer.cnpj}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Email da Empresa</span>
+                                        <div className="content-field">{order.customer.email}</div>
+                                    </div>
+                                    <div className="field" id="cep-in">
+                                        <span>Telefone da Empresa</span>
+                                        <div className="content-field">{order.customer.numero}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
                                     <div className="field" id="status-field">
                                         <span>Status</span>
                                         <div className="content-field">{order.statusdesc}</div>
@@ -459,7 +543,6 @@ export const Pedidos = ({ navigate }: Navigate) => {
                 }
             })
             }
-
         </>
     )
 
@@ -479,7 +562,16 @@ export const AcompanharPedidos = ({ navigate }: Navigate) => {
         statusdesc: '',
         price: 0.0,
         accepted: false,
-        finished: false
+        finished: false,
+        customer: {
+            _id: '0',
+            name: '',
+            cnpj: '',
+            numero: '',
+            email: '',
+            password: '',
+            orders: []
+        }
     });
 
     const [truck, setTruck] = useState<Truck>({
@@ -533,7 +625,7 @@ export const AcompanharPedidos = ({ navigate }: Navigate) => {
                 setOptionsDrivers(copyDrivers);
 
                 availibleTrucks.forEach((truck) => {
-                    if( truck.maxcapacity >= order.weight){
+                    if (truck.maxcapacity >= order.weight) {
                         copyTrucks.push({ label: truck.model, value: truck._id })
                     }
                 })

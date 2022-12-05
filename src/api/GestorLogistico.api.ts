@@ -97,6 +97,14 @@ class GlApi extends Api {
         })
     }
 
+    async pushNewCustomerOrder(orderId: string, customerId: string) {
+        await fetch(this.baseApiPath + 'customers/pushorder', {
+            method: 'POST',
+            body: JSON.stringify({ orderId, customerId }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+    }
+
     async addDriver(newDriver: NewDriver) {
         await fetch(this.baseApiPath + 'drivers/add', {
             method: 'POST',

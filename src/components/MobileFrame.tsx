@@ -1,14 +1,14 @@
 import { NavigateFunction } from "react-router-dom";
 import PageController from "./PageController";
 
-type Navigate = {
+type Page = {
     page: JSX.Element;
 }
 
 import { useContext } from "react";
 import { UserContext } from "../contexts/ContextUser"; 
 
-export const MobileFrame = ({ page }: Navigate) => {
+export const MobileFrame = ({ page }: Page) => {
 
     const { user } = useContext(UserContext);
     

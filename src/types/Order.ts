@@ -1,3 +1,4 @@
+import { Customer } from "./Customer";
 import { Driver } from "./Driver";
 import { Truck } from "./Truck";
 
@@ -13,6 +14,7 @@ export type Order = {
     statusdesc: string;
     driver?: Driver;
     truck?: Truck;
+    customer: Customer;
     price?: number;
     distance?: string;
     accepted: boolean;
