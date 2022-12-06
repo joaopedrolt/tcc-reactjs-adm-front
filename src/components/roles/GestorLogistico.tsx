@@ -142,7 +142,13 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
     orders.map((order) => {
 
-        if (!order.finished) {
+        let rejectedOrder: boolean = true;
+
+        if (order.statusdesc == "Pedido Rejeitado - Entre em contado para mais informações") {
+            rejectedOrder = false
+        }
+
+        if (!order.finished && rejectedOrder) {
             options.push({ label: order.desc, value: order._id });
         }
 
@@ -176,7 +182,13 @@ export const Pedidos = ({ navigate }: Navigate) => {
             {orders.map((order, index) => {
                 const status = order.status;
                 const accepted = order.accepted;
-                if (!status && !accepted) {
+                let rejectedOrder: boolean = true;
+
+                if (order.statusdesc == "Pedido Rejeitado - Entre em contado para mais informações") {
+                    rejectedOrder = false
+                }
+
+                if (!status && !accepted && rejectedOrder) {
                     return (
                         <div key={index} className="orders-container">
                             <div className="order">
