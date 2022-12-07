@@ -154,7 +154,7 @@ export const Pedidos = ({ navigate }: Navigate) => {
 
         const finished = order.finished;
 
-        if (!order.status) {
+        if (!order.status && rejectedOrder) {
             isTherePending = true;
         } else if (order.status && !finished) {
             isThereOngoing = true;
