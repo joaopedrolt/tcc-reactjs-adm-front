@@ -9,3 +9,7 @@ export type NewDriver = {
     name: string;
     status: boolean;
 }
+
+export type DriverValidation = {
+    user: boolean;
+}

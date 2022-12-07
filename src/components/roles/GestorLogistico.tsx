@@ -957,28 +957,45 @@ export const AdicionarTransporte = ({ navigate }: Navigate) => {
 
     const api = new GlApi();
 
-    const HandleCLick = () => {
+    const HandleCLick = async () => {
 
-        if (
-            (model == '' || model == undefined) ||
-            (plate == '' || plate == undefined) ||
-            (axle == '' || axle == undefined) ||
-            (maxcapacity == '' || maxcapacity == undefined)
-        ) { alert('Insira os Dados Corretamente!') } else {
+        const validation = await api.truckValidation(model, plate);
 
-            const addTruckModel: TruckAdd = {
-                model: model,
-                plateNumber: plate,
-                axle: axle,
-                maxcapacity: parseFloat(maxcapacity)
+        if (!validation) {
+            alert('Não foi possivel verificar os dados!');
+        } else if (validation) {
+            if (!validation.model && !validation.plateNumber) {
+                alert('Modelo e Placa já utilizados!');
+            } else if (!validation.model) {
+                alert('Modelo já utilizado!');
+            } else if (!validation.plateNumber) {
+                alert('Placa já utilizada!');
+            } else {
+
+                if (
+                    (model == '' || model == undefined) ||
+                    (plate == '' || plate == undefined) ||
+                    (axle == '' || axle == undefined) ||
+                    (maxcapacity == '' || maxcapacity == undefined)
+                ) { alert('Insira os Dados Corretamente!') } else {
+
+                    const addTruckModel: TruckAdd = {
+                        model: model,
+                        plateNumber: plate,
+                        axle: axle,
+                        maxcapacity: parseFloat(maxcapacity)
+                    }
+
+                    alert('Caminhão adicionado com sucesso!')
+
+                    api.postNewTruck(addTruckModel);
+
+                    const path = "/gl/garagem/";
+                    navigate(path);
+
+                }
+
             }
-
-            console.log(addTruckModel);
-
-            api.postNewTruck(addTruckModel);
-            const path = "/gl/garagem/";
-            navigate(path);
-
         }
 
     }
@@ -1107,33 +1124,45 @@ export const AdicionarMotorista = ({ navigate }: Navigate) => {
 
     const api = new GlApi();
 
-    const HandleCLick = () => {
+    const HandleCLick = async () => {
 
-        if (
-            (name == '' || name == undefined) ||
-            (user == '' || user == undefined) ||
-            (password == '' || password == undefined)
-        ) { alert('Insira os Dados Corretamente!') } else {
+        const validation = await api.driverValidation(user);
 
-            const newDriver: NewDriver = {
-                name,
-                status: false
+        if (!validation) {
+            alert('Não foi possivel verificar os dados!');
+        } else if (validation.user) {
+
+            if (
+                (name == '' || name == undefined) ||
+                (user == '' || user == undefined) ||
+                (password == '' || password == undefined)
+            ) { alert('Insira os Dados Corretamente!') } else {
+
+                const newDriver: NewDriver = {
+                    name,
+                    status: false
+                }
+
+                api.addDriver(newDriver);
+
+                const newUser: UserAdd = {
+                    name,
+                    user,
+                    password,
+                    role: "Motorista"
+                }
+
+                api.addUser(newUser);
+
+                alert('Motorista cadastrado com sucesso!');
+
+                const path = "/gl/motoristas/";
+                navigate(path);
+
             }
 
-            api.addDriver(newDriver);
-
-            const newUser: UserAdd = {
-                name,
-                user,
-                password,
-                role: "Motorista"
-            }
-
-            api.addUser(newUser);
-
-            const path = "/gl/motoristas/";
-            navigate(path);
-
+        } else {
+            alert('Credencial já utilizada!');
         }
 
     }

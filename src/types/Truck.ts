@@ -14,3 +14,8 @@ export type TruckAdd = {
     axle: string; 
     maxcapacity: number;
 }
+
+export type TruckValidation = {
+    model: boolean;
+    plateNumber: boolean;
+}

@@ -1,7 +1,7 @@
-import { Driver, NewDriver } from "../types/Driver";
+import { Driver, DriverValidation, NewDriver } from "../types/Driver";
 import { GlDashBoardDto } from "../types/GlDashBoard";
 import { Order } from "../types/Order";
-import { Truck, TruckAdd } from "../types/Truck";
+import { Truck, TruckAdd, TruckValidation } from "../types/Truck";
 import { UserAdd } from "../types/User";
 import Api from "./ApiClass";
 
@@ -137,6 +137,29 @@ class GlApi extends Api {
         })
     }
 
+    async driverValidation(user: string) : Promise<DriverValidation>  {
+        const response = await fetch(this.baseApiPath + 'users/validation', {
+            method: 'POST',
+            body: JSON.stringify({user}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Request-Private-Network': 'true'
+            }
+        })
+        return await response.json();
+    }
+
+    async truckValidation(model: string, plateNumber: string) : Promise<TruckValidation>  {
+        const response = await fetch(this.baseApiPath + 'garage/validation', {
+            method: 'POST',
+            body: JSON.stringify({model, plateNumber}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Request-Private-Network': 'true'
+            }
+        })
+        return await response.json();
+    }
 
 }
 
