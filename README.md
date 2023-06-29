@@ -9,22 +9,17 @@
 
 ## Descrição
 
-API REST desenvolvida em NestJS, que utiliza o MongoDB como seu sistema de gerenciamento de banco de dados. A API tem como objetivo fornecer um serviço de integração entre a API do Google Maps e a API dos Correios, devolvendo as informações relevantes para o front-end.
+Aplicação React onde os usuários administradores têm acesso a recursos que permitem cadastrar, visualizar, atualizar e excluir informações relacionadas a pedidos, veículos e funcionários de forma intuitiva e eficiente.
 
 ## Tecnologias Utilizadas
 
-* NestJS
+* React
 * TypeScript
-* MongoDB
-* Google Maps Api
-* Axios
+* Vite
 
 ## Funcionalidades
 
-* Interagir com outros serviços (Correios, Google Maps).
-* Manipular o banco de dados (MongoDB).
-* Processar dados e unir informações.
-* Entregar as informações ao front (Rest API).
+* Interface de gerenciamento de pedidos, veículos e funcionários.
 
 ## Autoria
 
